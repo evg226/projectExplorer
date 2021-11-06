@@ -4,7 +4,7 @@ const sequelize = require("./db");//загрузка описания подкл
 const models = require("./models/models"); // загрузка описания модели и связей 
 const cors = require("cors");
 const router = require("./routes/index"); //загрузка роутера
-
+const errorHandler = require("./middleware/errorHandlingMiddleware"); //загрузка middleware обрабатывающего ошибки
 
 const PORT = process.env.PORT || 5001;
 const app = express();
@@ -13,7 +13,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api", router);
+app.use("/api", router); //подключение роутера
+app.use(errorHandler); //обработка ошибок
 
 // описание инициализации сервера
 const start = async () => {
