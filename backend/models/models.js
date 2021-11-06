@@ -1,4 +1,4 @@
-const sequelize = require("../db"); 
+const sequelize = require("../db");
 const { DataTypes } = require("sequelize");
 
 // Models description
@@ -21,38 +21,38 @@ const BasketProject = sequelize.define("basket_project", {
 
 const Project = sequelize.define("project", {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    name: { type: DataTypes.STRING,unique: true,allowNull:false },
+    name: { type: DataTypes.STRING, unique: true, allowNull: false },
     description: { type: DataTypes.STRING },
     start: { type: DataTypes.DATE },
     finish: { type: DataTypes.DATE },
-    rating: { type: DataTypes.INTEGER }
+    rating: { type: DataTypes.INTEGER, defaultValue: 0 }
 });
 
 const Type = sequelize.define("type", {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    name: { type: DataTypes.STRING,unique: true,allowNull:false },
+    name: { type: DataTypes.STRING, unique: true, allowNull: false },
 });
 
 const Author = sequelize.define("author", {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    name: { type: DataTypes.STRING,unique: true,allowNull:false },
+    name: { type: DataTypes.STRING, unique: true, allowNull: false },
 });
 
 const Rating = sequelize.define("rating", {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    rate: { type: DataTypes.STRING, allowNull:false }
+    rate: { type: DataTypes.STRING, allowNull: false }
 });
 
 const Img = sequelize.define("img", {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     name: { type: DataTypes.STRING, allowNull: false },
-    path: { type: DataTypes.STRING, allowNull:false }
+    path: { type: DataTypes.STRING, allowNull: false }
 });
 
 const Stack = sequelize.define("stack", {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     name: { type: DataTypes.STRING, allowNull: false },
-    description: { type: DataTypes.STRING, allowNull:false }
+    description: { type: DataTypes.STRING, allowNull: false }
 });
 
 const TypeAuthor = sequelize.define("type_author", {
