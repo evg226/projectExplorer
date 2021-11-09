@@ -82,10 +82,10 @@ Rating.belongsTo(Project);
 Project.hasOne(BasketProject);
 BasketProject.belongsTo(Project);
 
-Project.hasMany(Img);
+Project.hasMany(Img,{as:"img"});
 Img.belongsTo(Project);
 
-Project.hasMany(Stack);
+Project.hasMany(Stack,{as:"stack"});
 Stack.belongsTo(Project);
 
 Type.belongsToMany(Author, { through: TypeAuthor });
