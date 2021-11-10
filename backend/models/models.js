@@ -40,7 +40,8 @@ const Author = sequelize.define("author", {
 
 const Rating = sequelize.define("rating", {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    rate: { type: DataTypes.STRING, allowNull: false }
+    rate: { type: DataTypes.INTEGER, allowNull: false },
+    description: { type: DataTypes.STRING}
 });
 
 const Img = sequelize.define("img", {
@@ -76,7 +77,7 @@ Project.belongsTo(Type);
 Author.hasMany(Project);
 Project.belongsTo(Author);
 
-Project.hasMany(Rating);
+Project.hasMany(Rating, {as:"rates"});
 Rating.belongsTo(Project);
 
 Project.hasOne(BasketProject);
