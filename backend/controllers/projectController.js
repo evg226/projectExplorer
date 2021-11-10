@@ -86,8 +86,6 @@ class ProjectController {
         });
         return response.json(project);
     }
-
-
 };
 
 module.exports = new ProjectController();
