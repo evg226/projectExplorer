@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User, Basket } = require("../models/models");
 
-const generateJwt = (id, email,  role)=>{
+const generateJwt = (id, email, role)=>{
     return jwt.sign(
         { id, email, role },
         process.env.SECRET_KEY,
@@ -29,7 +29,7 @@ class UserController {
             const basket = await Basket.create({ userId: user.id }); //создаем корзину пользователя в БД
             //Генерируем JWT-токен
             const token = generateJwt(user.id, user.email, user.role);
-        return response.json(token);
+        return response.json({token});
     };
 
     async signin(request, response,next ) {
@@ -43,15 +43,14 @@ class UserController {
             return next(ApiError.forbidden("Неверный пароль"));
         };
         const token = generateJwt(user.id, user.email, user.role); // генерируем JWT-токен
-        return response.json(token);
+        return response.json({token});
     }
 
-    async authCheck(request, response, next) {
-        const { id } = request.query;
-        if (!id) {
-            return next(ApiError.badRequest("Не задан 'ID'"));
-        };
-        response.json(id);
+    async authCheck(request, response) {
+        // При проверке на аутентификацию генерируется новый токен
+        const token = generateJwt(request.user.id, request.user.email, request.user.role); // генерируем JWT-токен
+        return response.json({token});
+     
     }
 };
 module.exports = new UserController();
