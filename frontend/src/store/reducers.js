@@ -27,10 +27,10 @@ export const initialProjects = {
         { id: 2, name: "type2" },
     ],
     projects: [
-        { id: 1, name: "project1", description: "Описание 1", rating: 5, authorId:1, typeId:1, imgs:[], stacks:[] },
-        { id: 2, name: "project2", description: "Описание 2", rating: 5, authorId: 1, typeId: 2, imgs: [], stacks: [] },
-        { id: 1, name: "project3", description: "Описание 3", rating: 5, authorId:2, typeId:2, imgs:[], stacks:[] },
-        { id: 2, name: "project4", description: "Описание 4", rating: 5, authorId:3, typeId:1, imgs:[], stacks:[] },
+        { id: 1, name: "project1", description: "Описание 1", start:"2021-04-01", finish: "2021-04-30", rating: 5, authorId:1, typeId:1, imgs:[], stacks:[] },
+        { id: 2, name: "project2", description: "Описание 2", start:"2021-04-01", finish: "2021-04-30", rating: 5, authorId: 1, typeId: 2, imgs: [], stacks: [] },
+        { id: 1, name: "project3", description: "Описание 3", start:"2021-04-01", finish: "2021-04-30", rating: 5, authorId:2, typeId:2, imgs:[], stacks:[] },
+        { id: 2, name: "project4", description: "Описание 4", start:"2021-04-01", finish: "2021-04-30", rating: 5, authorId:3, typeId:1, imgs:[], stacks:[] },
     ]
 }
 
