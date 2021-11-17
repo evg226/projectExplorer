@@ -1,6 +1,7 @@
 import React from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import { AuthorBar } from '../components/authorBar';
+import { ProjectList } from '../components/projectList';
 import { TypeBar } from '../components/typeBar'
 
 export const  Desk = () => {
@@ -8,11 +9,12 @@ export const  Desk = () => {
         <Container>
                 
             <Row>
-                <Col md={3}>
+                <Col sm={3}>
                     <TypeBar />
                 </Col>
-                <Col md={9}>
+                <Col sm={9}>
                     <AuthorBar />
+                    <ProjectList />
                 </Col>
             </Row>
 

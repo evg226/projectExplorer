@@ -4,3 +4,7 @@ a {
 .App {
   text-align: center;
 }
+
+.hover:hover {
+  background-color: #f7f4f4;
+}

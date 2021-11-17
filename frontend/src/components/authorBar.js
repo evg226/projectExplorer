@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Col, ListGroup, Row } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { setSeletedAuthor } from '../store/action';
 import { getAuthors, getSelectedAuthor } from '../store/selectors';
@@ -16,14 +16,15 @@ export const AuthorBar=()=> {
         }
     }
     return (
-        <Row className="d-flex mt-2">
+        <Row className="d-flex justify-content-start mt-2">
                  {
                     authors.map(item =>
-                       <Col key={item.id} className="px-1 text-center">
+                        <Col key={item.id} className="px-1 text-center">
                         <Card
+                            text={(item.id ===  selectedAuthor.id )?"dark":"secondary"}        
                             style={{ cursor: "pointer"}}
                             border={(item.id ===  selectedAuthor.id )?"dark":"light"}
-                            className="p-3"
+                            className="p-3 hover"
                             onClick={()=>handleClickItem(item)}
                         >
                             {item.name}

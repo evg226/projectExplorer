@@ -4,6 +4,7 @@ import { Routes, Route,Navigate } from "react-router-dom";
 import { DESK_ROUTE } from '../utils/constants';
 import { shallowEqual, useSelector } from 'react-redux';
 import { getUser } from '../store/selectors';
+import { Project } from '../pages/project';
 
 
 export const AppRouter = () => {
