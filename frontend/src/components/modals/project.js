@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button,Col,Dropdown,Form, FormControl, Modal, Row } from "react-bootstrap";
+import { Button,Col,Dropdown,Form,  Modal, Row } from "react-bootstrap";
 import { shallowEqual, useSelector } from "react-redux";
 import { getAuthors, getTypes } from "../../store/selectors";
 import { TypeAuthorCreate } from "./typeAuthor";
