@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 import { Col, Container, Image, Row } from 'react-bootstrap'
-import { useSelector } from 'react-redux'
-import { getProjects } from '../store/selectors'
 
 export const Project = () => {
 

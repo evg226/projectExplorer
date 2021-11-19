@@ -1,4 +1,4 @@
-import { SET_SELECTED_AUTHOR, SET_SELECTED_TYPE, SET_USER } from "./action";
+import {ADD_AUTHORS, ADD_PROJECTS, ADD_TYPES, SET_SELECTED_AUTHOR, SET_SELECTED_TYPE, SET_USER} from "./action";
 
 const initialUser = {
     name:"",
@@ -17,31 +17,11 @@ export const reducerUser = (state = initialUser, action) => {
 };
 
 export const initialProjects = {
-    authors: [
-        { id: 1, name: "author1" },
-        { id: 2, name: "author2" },
-        { id: 3, name: "author3" },
-        { id: 4, name: "author4" }
-    ],
-    types: [
-        { id: 1, name: "type1" },
-        { id: 2, name: "type2" },
-        { id: 3, name: "type3" },
-        { id: 4, name: "type4" },
-    ],
-    projects: [
-        { id: 1, name: "project1", description: "Описание 1", start:"2021-04-01", finish: "2021-04-30", rating: 5, authorId:1, typeId:1, img:"", imgs:[], stacks:[] },
-        { id: 2, name: "project2", description: "Описание 2", start:"2021-04-01", finish: "2021-04-30", rating: 5, authorId: 1, typeId: 3, img:"", imgs: [], stacks: [] },
-        { id: 3, name: "project3", description: "Описание 3", start:"2021-04-01", finish: "2021-04-30", rating: 5, authorId:2, typeId:4, img:"", imgs:[], stacks:[] },
-        { id: 4, name: "project4", description: "Описание 4", start: "2021-04-01", finish: "2021-04-30", rating: 5, authorId: 3, typeId: 2, img:"", imgs: [], stacks: [] },
-        { id: 5, name: "project1", description: "Описание 1", start:"2021-04-01", finish: "2021-04-30", rating: 5, authorId:1, typeId:1, img:"", imgs:[], stacks:[] },
-        { id: 6, name: "project2", description: "Описание 2", start:"2021-04-01", finish: "2021-04-30", rating: 5, authorId: 1, typeId: 3, img:"", imgs: [], stacks: [] },
-        { id: 7, name: "project3", description: "Описание 3", start:"2021-04-01", finish: "2021-04-30", rating: 5, authorId:2, typeId:4, img:"", imgs:[], stacks:[] },
-        { id: 8, name: "project4", description: "Описание 4", start:"2021-04-01", finish: "2021-04-30", rating: 5, authorId:3, typeId:2, img:"", imgs:[], stacks:[] },
-    ],
+    authors: [],
+    types: [],
+    projects: [],
     selectedType: {},
-    selectedAuthor:{},
-
+    selectedAuthor: {},
 }
 
 export const reducerProjects=(state = initialProjects , action) => {
@@ -50,14 +30,31 @@ export const reducerProjects=(state = initialProjects , action) => {
             return {
                 ...state,
                 selectedType:action.payload
-            }
+            };
+
         case SET_SELECTED_AUTHOR:
             return {
                 ...state,
                 selectedAuthor:action.payload
-            }
+            };
+        case ADD_TYPES:
+            return {
+                ...state,
+                types:action.payload
+            };
+        case ADD_AUTHORS:
+            return {
+                ...state,
+                authors:action.payload
+            };
+        case ADD_PROJECTS:
+            return {
+                ...state,
+                projects:action.payload
+            };
         default:
             return state;
+
     }
 };
 

@@ -7,7 +7,6 @@ import { TypeBar } from '../components/typeBar'
 export const  Desk = () => {
     return (
         <Container>
-                
             <Row>
                 <Col sm={3}>
                     <TypeBar />

@@ -1,9 +1,9 @@
 
 import React, {useEffect, useState} from 'react'
 import {Button, Card, Container, Form } from 'react-bootstrap'
-import {useLocation, useNavigate} from 'react-router'
-import {NavLink, useHistory} from 'react-router-dom';
-import {DESK_ROUTE, SIGNIN_ROUTE, SIGNUP_ROUTE} from '../utils/constants';
+import {useLocation, } from 'react-router'
+import {NavLink, } from 'react-router-dom';
+import { SIGNIN_ROUTE, SIGNUP_ROUTE} from '../utils/constants';
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {getAuth} from "../store/action";
 import {getUser} from "../store/selectors";

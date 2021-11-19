@@ -5,14 +5,14 @@ import { AppNavbar  } from './components/appNavbar';
 import {getUser} from "./store/selectors";
 import {shallowEqual, useDispatch,useSelector} from "react-redux";
 import {useEffect} from "react";
-import {checkAuth} from "./store/action";
+import {appLoading} from "./store/action";
 import {Container, Spinner} from "react-bootstrap";
 
 function App() {
     const user = useSelector (getUser,shallowEqual);
     const dispatch=useDispatch();
     useEffect(()=> {
-      dispatch(checkAuth());
+        dispatch(appLoading());
     },[]);
     return  user.loading
         ?

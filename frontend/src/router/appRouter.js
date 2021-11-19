@@ -1,11 +1,9 @@
 import React from 'react';
 import { authRoutes, publicRoutes } from './routes';
 import { Routes, Route,Navigate } from "react-router-dom";
-import {DESK_ROUTE, SIGNIN_ROUTE, SIGNUP_ROUTE} from '../utils/constants';
+import {DESK_ROUTE, SIGNIN_ROUTE} from '../utils/constants';
 import { shallowEqual, useSelector } from 'react-redux';
 import { getUser } from '../store/selectors';
-
-
 
 export const AppRouter = () => {
     const user = useSelector(getUser, shallowEqual);
