@@ -1,8 +1,10 @@
 import { SET_SELECTED_AUTHOR, SET_SELECTED_TYPE, SET_USER } from "./action";
 
 const initialUser = {
-    name:"default",
-    isAuth: true
+    name:"",
+    isAuth: false,
+    error:"",
+    loading:true
 };
 
 export const reducerUser = (state = initialUser, action) => {

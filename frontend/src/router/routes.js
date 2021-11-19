@@ -8,29 +8,29 @@ import { ADMIN_ROUTE, DESK_ROUTE, PROJECT_ROUTE, SELECTED_DESK, SIGNIN_ROUTE, SI
 export const authRoutes = [
     {
         path: ADMIN_ROUTE,
-        Component:Admin
+        Component:<Admin />
     },
     {
         path: SELECTED_DESK,
-        Component:SelectedDesk
+        Component:<SelectedDesk />
     }
 ];
 
 export const publicRoutes = [
     {
         path: SIGNIN_ROUTE,
-        Component: Auth
+        Component: <Auth />
     },
     {
         path: SIGNUP_ROUTE,
-        Component:Auth
+        Component:<Auth />
     },
     {
         path: DESK_ROUTE,
-        Component: Desk
+        Component: <Desk />
     },
     {
         path: PROJECT_ROUTE+"/:id",
-        Component:Project
+        Component:<Project />
     }
 ];

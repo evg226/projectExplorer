@@ -1,22 +1,30 @@
 import './App.css';
-
 import { BrowserRouter } from "react-router-dom";
 import { AppRouter } from './router/appRouter';
-import { store } from './store';
-import { Provider } from "react-redux";
 import { AppNavbar  } from './components/appNavbar';
-
-
+import {getUser} from "./store/selectors";
+import {shallowEqual, useDispatch,useSelector} from "react-redux";
+import {useEffect} from "react";
+import {checkAuth} from "./store/action";
+import {Container, Spinner} from "react-bootstrap";
 
 function App() {
-  return (
-    <Provider store={store} >
-      <BrowserRouter>
-        <AppNavbar />
-        <AppRouter />
-      </BrowserRouter>
-    </Provider>
-  );
+    const user = useSelector (getUser,shallowEqual);
+    const dispatch=useDispatch();
+    useEffect(()=> {
+      dispatch(checkAuth());
+    },[]);
+    return  user.loading
+        ?
+              <Container style={{height:window.innerWidth}} className="d-flex justify-content-center align-items-center">
+                  <Spinner animation={"border"} variant={"secondary"} />
+              </Container>
+        :
+              <BrowserRouter>
+                  <AppNavbar />
+                  <AppRouter />
+              </BrowserRouter>
+
 }
 
 export default App;

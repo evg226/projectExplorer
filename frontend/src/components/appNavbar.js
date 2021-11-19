@@ -13,18 +13,15 @@ export const AppNavbar = () => {
     const navigate = useNavigate();
 
     const handleClickSignin = () => {
-        if (isAuthed) {
-            dispatch(setUser({ name: "", isAuth: false }));
+        if (!isAuthed) {
             navigate(SIGNIN_ROUTE);
         } else {
-            dispatch(setUser({ name: "default", isAuth: true }));
+            dispatch(setUser({ name: "", isAuth: false }));
             navigate(DESK_ROUTE);
         }
-        
     }
     return (
         <>
-            
             <Navbar collapseOnSelect expand="sm" bg="dark" variant="dark">
                 <Container>
                     <NavLink to={DESK_ROUTE}>
@@ -40,7 +37,7 @@ export const AppNavbar = () => {
                                 <Nav.Item>
                                     <Nav.Link onClick={()=>navigate(SELECTED_DESK)}>Избранное</Nav.Link>
                                 </Nav.Item>}
-                            <NavDropdown title="USER" id="collasible-nav-dropdown" align="end">
+                            <NavDropdown title={"User: "+user.name} id="collasible-nav-dropdown" align="end">
                                 <NavDropdown.Item onClick={handleClickSignin}>{!isAuthed ? "Войти" : "Выйти"}</NavDropdown.Item>    
                                 <NavDropdown.Item onClick={()=>navigate(SIGNUP_ROUTE)}>Регистрация</NavDropdown.Item>
                                 <NavDropdown.Divider />

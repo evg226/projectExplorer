@@ -1,7 +1,7 @@
 import React from 'react';
 import { authRoutes, publicRoutes } from './routes';
 import { Routes, Route,Navigate } from "react-router-dom";
-import { DESK_ROUTE } from '../utils/constants';
+import {DESK_ROUTE, SIGNIN_ROUTE, SIGNUP_ROUTE} from '../utils/constants';
 import { shallowEqual, useSelector } from 'react-redux';
 import { getUser } from '../store/selectors';
 
@@ -13,13 +13,26 @@ export const AppRouter = () => {
 
     return (
         <Routes>
-            {isAuth && authRoutes.map(({ path, Component }) =>
-                <Route key={path} path={path} element={Component()} exact />
+            {  authRoutes.map(({ path, Component }) =>
+                <Route key={path} path={path}
+                       element={
+                           isAuth ?
+                               Component
+                               :
+                               <Navigate replace to={DESK_ROUTE}/>
+                       }
+                       exact />
             )}
             {publicRoutes.map(({ path, Component }) =>
-                <Route key={path} path={path} element={Component()} exact />
+                <Route key={path} path={path}
+                       element={
+                           (isAuth && (path===SIGNIN_ROUTE))?
+                               <Navigate replace to={DESK_ROUTE}/>
+                               :
+                           Component
+                       } exact />
             )}
-            <Route element={<Navigate replace to={DESK_ROUTE} />} />
+            <Route path={"*"} element={<Navigate replace to={DESK_ROUTE} />} />
               
         </Routes>
     )
