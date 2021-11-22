@@ -1,5 +1,5 @@
 import {check, signin, signup} from "../http/userApi";
-import {fetchAuthors, fetchProjects, fetchTypes} from "../http/deviceApi";
+import {fetchAuthors, fetchProjectbyId, fetchProjects, fetchTypes} from "../http/deviceApi";
 export const SET_USER = "USER::SET_USER";
 
 export const setUser = (user) => {
@@ -28,6 +28,15 @@ export const setSeletedAuthor = (author) => {
     }
 }
 
+export const SET_SELECTED_PROJECT = "PROJECT::SET_SELECTED_PROJECT";
+
+export const setSeletedProject = (project) => {
+    return {
+        type: SET_SELECTED_PROJECT,
+        payload:project
+    }
+}
+
 export const getAuth = (isSignin,email,password)=>async(dispatch)=>{
     let user;
     try{
@@ -51,6 +60,7 @@ export const checkAuth = ()=>async(dispatch)=>{
         user= { name: response.email, isAuth: true,loading:false};
     } catch (e){
         console.log(e.message);
+        console.log(e.response.data.message);
     }
     setTimeout(() => {
         dispatch(setUser(user));
@@ -90,6 +100,7 @@ export const loadTypes = () => async(dispatch)=>{
         types = await fetchTypes();
     } catch (e) {
         console.log(e);
+        console.log(e.response.data.message);
     } finally {
         dispatch(addTypes(types));
     }
@@ -101,6 +112,7 @@ export const loadAuthors = () => async(dispatch)=>{
         authors = await fetchAuthors();
     } catch (e) {
         console.log(e);
+        console.log(e.response.data.message);
     } finally {
         dispatch(addAuthors(authors));
     }
@@ -112,6 +124,7 @@ export const loadProjects = () => async(dispatch)=>{
         projects = await fetchProjects();
     } catch (e) {
         console.log(e);
+        console.log(e.response.data.message);
     } finally {
         dispatch(addProjects(projects.rows));
     }
@@ -122,4 +135,22 @@ export const appLoading = ()=>dispatch=>{
     dispatch(loadTypes());
     dispatch(loadAuthors());
     dispatch(loadProjects());
+}
+
+export const loadProject=(id)=>async (dispatch) =>{
+    dispatch(setSeletedProject({loading: true, error: "", loaded: false, data:{}}));
+    let project={};
+    try {
+        const currentProject=await fetchProjectbyId(id);
+        project={loading: false, error: "", loaded: true, data:currentProject?currentProject:{id,name:"Не найдено"}};
+    }catch (e) {
+        console.log(e);
+        console.log(e.response.data.message);
+        project={loading: false, error: e.response.data.message, loaded: false, data:{}};
+    } finally {
+        dispatch(setSeletedProject(project));
+    }
+
+
+
 }

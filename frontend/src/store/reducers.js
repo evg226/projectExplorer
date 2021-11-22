@@ -1,4 +1,12 @@
-import {ADD_AUTHORS, ADD_PROJECTS, ADD_TYPES, SET_SELECTED_AUTHOR, SET_SELECTED_TYPE, SET_USER} from "./action";
+import {
+    ADD_AUTHORS,
+    ADD_PROJECTS,
+    ADD_TYPES,
+    SET_SELECTED_AUTHOR,
+    SET_SELECTED_PROJECT,
+    SET_SELECTED_TYPE,
+    SET_USER
+} from "./action";
 
 const initialUser = {
     name:"",
@@ -22,6 +30,9 @@ export const initialProjects = {
     projects: [],
     selectedType: {},
     selectedAuthor: {},
+    selectedProject:{
+        loading:false, error:"",loaded:false,data:{}
+    }
 }
 
 export const reducerProjects=(state = initialProjects , action) => {
@@ -31,11 +42,15 @@ export const reducerProjects=(state = initialProjects , action) => {
                 ...state,
                 selectedType:action.payload
             };
-
         case SET_SELECTED_AUTHOR:
             return {
                 ...state,
                 selectedAuthor:action.payload
+            };
+        case SET_SELECTED_PROJECT:
+            return {
+                ...state,
+                selectedProject:action.payload
             };
         case ADD_TYPES:
             return {

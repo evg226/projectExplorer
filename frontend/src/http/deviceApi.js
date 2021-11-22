@@ -1,5 +1,4 @@
 import {$host,$authHost} from "./index";
-import jwt_decode from "jwt-decode";
 
 export const createType= async (type) =>{
     const responce = await $authHost.post("api/type",type);
@@ -28,6 +27,11 @@ export const createProject= async (project) =>{
 
 export const fetchProjects = async () =>{
     const {data} = await $host.get("api/project");
+    return data;
+};
+
+export const fetchProjectbyId = async (id) =>{
+    const {data} = await $host.get("api/project/"+id);
     return data;
 };
 

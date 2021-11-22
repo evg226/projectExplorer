@@ -1,16 +1,22 @@
-import React, { useState } from 'react'
-import { Col, Container, Image, Row } from 'react-bootstrap'
+import React, {useEffect, useState} from 'react'
+import {Col, Container, Image, Row, Spinner} from 'react-bootstrap'
+import {useParams} from "react-router";
+import {shallowEqual, useDispatch, useSelector} from "react-redux";
+import {getSelectedProject} from "../store/selectors";
+import { loadProject} from "../store/action";
 
 export const Project = () => {
 
-    const project = {
-        id: 1, name: "project1", description: "Описание dfdf;l dfkldkfl dfkldkfld dfkldfkld", start: "2021-04-01", finish: "2021-04-30", rating: 5,
-        authorId: 1, typeId: 1, img: "",
-        imgs: [{id:1,path:"1.png"},{id:2,path:"2.png"},{id:3,path:"3.png"},],
-        stacks: [{ id: 1, name: "React", description: "dfdfd dfdfd dfddf" }, { id: 2, name: "Redux", description: "dfdfd dfdfd dfddf" }, { id: 3, name: "Express", description: "dfdfd dfdfd dfddf" }],
-        ratings:  [{ id: 1, name: 5, description: "dfdfd dfdfd dfddf" }, { id: 2, name: 4, description: "dfdfd dfdfd dfddf" }, { id: 3, name: 3, description: "dfdfd dfdfd dfddf" }],
-    };
-    
+
+    const {id}=useParams();
+    const dispatch=useDispatch();
+    const project=useSelector(getSelectedProject,shallowEqual);
+    // console.log(project);
+    // console.log(id);
+    useEffect(()=>{
+        dispatch(loadProject(id));
+    },[id]);
+
     const [currentImg, setCurrentImg] = useState(0);
 
     const handleImageChange = () => {
@@ -23,38 +29,50 @@ export const Project = () => {
 
     return (
         <div>
-            <Container>
-                 
-                
-                <Row>
-                    <Col md={6} style={{ cursor: "pointer" }} onClick={handleImageChange}>
-                    <Image  width={"100%"} src={project.imgs[currentImg].path} alt={project.imgs[currentImg].path} />
-                        <span >{">>"}</span>
-                    
-                    </Col>
-                    <Col md={6}>
-                        <h2>{project.name}</h2>
-                        <h5>Rating: <Image width={25} src="/star.png" />{project.rating}</h5>
-                        <h4>Stack</h4>
-                        {project.stacks.map(item =>
-                            <Row key={item.id}>
-                                <Col sm={2}>{item.name}</Col>
-                                <Col sm={4}>{item.description}</Col>
-                            </Row>
-                        )}
-                    </Col>
-                </Row>
-                <Row>
-                    <h4>Рецензии</h4>
-                    {project.ratings.map(item =>
-                        <Row key={item.id} className="my-2">
-                            <Col sm={2}>{item.name} <Image width={40} src="/star.png" /></Col>
-                            <Col className="d-flex align-items-center" sm={4}>{item.description}</Col>
-                        </Row>
-                    )}
+            {
+                !project.loaded ?
+                    <Container>
+                        <h4>Загрузка данных...</h4>
+                        {
+                            project.loading?
+                                <Spinner animation={"border"} variant={"secondary"} />
+                                :
+                                project.error
+                        }
+                    </Container>
+                    :
+                    <Container>
+                        <Row>
+                            <Col md={6} style={{cursor: "pointer"}} onClick={handleImageChange}>
+                                <Image width={"100%"} src={project.data.imgs&&project.data.imgs[currentImg].path}
+                                       alt={project.data.imgs?project.data.imgs[currentImg].path:"No images in this"}/>
+                                <span>{">>"}</span>
 
-                </Row>
-            </Container>
+                            </Col>
+                            <Col md={6}>
+                                <h2>{project.data.name}</h2>
+                                <h5>Rating: <Image width={25} src="/star.png"/>{project.data.rating}</h5>
+                                <h4>Stack</h4>
+                                {project.data.stacks && project.data.stacks.map(item =>
+                                    <Row key={item.id}>
+                                        <Col sm={2}>{item.name}</Col>
+                                        <Col sm={4}>{item.description}</Col>
+                                    </Row>
+                                )}
+                            </Col>
+                        </Row>
+                        <Row>
+                            <h4>Рецензии</h4>
+                            {project.data.ratings && project.data.ratings.map(item =>
+                                <Row key={item.id} className="my-2">
+                                    <Col sm={2}>{item.name} <Image width={40} src="/star.png"/></Col>
+                                    <Col className="d-flex align-items-center" sm={4}>{item.description}</Col>
+                                </Row>
+                            )}
+
+                        </Row>
+                    </Container>
+            }
         </div>
     );
 }
