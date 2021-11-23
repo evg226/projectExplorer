@@ -1,7 +1,7 @@
 import { Col, Image, Card } from "react-bootstrap"
 import  {useNavigate}  from "react-router-dom";
 import { PROJECT_ROUTE } from "../utils/constants";
-
+import {baseURL} from "../utils/constants";
 export const ProjectItem = ({item}) => {
     const navigate = useNavigate();
     
@@ -12,7 +12,7 @@ export const ProjectItem = ({item}) => {
                 style={{ width: 200, cursor: "pointer" }}
                 border="light"
             >
-                <Image width={200} height={200} src={item.img} alt={"image "+item.name} />
+                <Image width={200} height={200} src={baseURL+item.icon} alt={"image "+item.name} />
                 <div className="d-flex justify-content-between mt-2 text-black-50">
                     <div >
                         Web-Front

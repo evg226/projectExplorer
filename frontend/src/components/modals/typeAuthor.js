@@ -8,9 +8,11 @@ export const TypeAuthorCreate=({what,show,onHide,add})=> {
   const handleAddButton = () => {
     if (!!desc) {
       add(name, desc);
-      setName("");
-      setDesc("");
-    };
+    }  else {
+      add(name);
+    }
+    setName("");
+    setDesc("");
     onHide();
   }
     
@@ -28,12 +30,10 @@ export const TypeAuthorCreate=({what,show,onHide,add})=> {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {name}
-        {desc}
-              <Form>  
-          <Form.Control placeholder={`Введите название ${what}а проекта`} value={name} onChange={e=>setName(e.target.value)}/>
-          {what === "стек" && <Form.Control as="textarea" rows={3}
-                                value={desc} onChange={(e)=>setDesc(e.target.value)} placeholder={`Введите описание ${what}а проекта`} />}
+              <Form>
+          <Form.Control placeholder={`Название ${what}а`} value={name} onChange={e=>setName(e.target.value)}/>
+          {what === "стек" && <Form.Control as="textarea" rows={3} className={"mt-2"}
+                                value={desc} onChange={(e)=>setDesc(e.target.value)} placeholder={`Описание ${what}а`} />}
         </Form>
       </Modal.Body>
       <Modal.Footer>

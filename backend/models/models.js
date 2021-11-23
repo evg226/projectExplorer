@@ -23,6 +23,7 @@ const Project = sequelize.define("project", {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     name: { type: DataTypes.STRING, unique: true, allowNull: false },
     description: { type: DataTypes.STRING },
+    icon: { type: DataTypes.STRING },
     start: { type: DataTypes.DATE },
     finish: { type: DataTypes.DATE },
     rating: { type: DataTypes.INTEGER, defaultValue: 0 }
@@ -89,8 +90,8 @@ Img.belongsTo(Project);
 Project.hasMany(Stack,{as:"stack"});
 Stack.belongsTo(Project);
 
-Type.belongsToMany(Author, { through: TypeAuthor });
-Author.belongsToMany(Type, { through: TypeAuthor });
+// Type.belongsToMany(Author, { through: TypeAuthor });
+// Author.belongsToMany(Type, { through: TypeAuthor });
 
 module.exports = {
     User,

@@ -2,11 +2,22 @@ import React, { useState } from 'react'
 import { Button,Container } from 'react-bootstrap'
 import { ProjectCreate } from '../components/modals/project';
 import { TypeAuthorCreate } from '../components/modals/typeAuthor'
+import {useDispatch} from "react-redux";
+import {insertAuthorToDB, insertTypeToDB} from "../store/action";
 
 export const Admin = () => {
     const [typeVisible, setTypeVisible] = useState(false);
     const [authorVisible, setAuthorVisible] = useState(false);
     const [projectVisible, setProjectVisible] = useState(false);
+    const dispatch=useDispatch();
+
+    const handleAddType= (typeName) => {
+        dispatch(insertTypeToDB(typeName));
+    }
+
+    const handleAddAuthor= (authorName) => {
+        dispatch(insertAuthorToDB(authorName));
+    }
 
     return (
         <Container>
@@ -21,8 +32,8 @@ export const Admin = () => {
                 <Button variant={"outline-dark"} onClick={()=>setProjectVisible(true)}>
                     Добавить проект
                 </Button>
-                <TypeAuthorCreate what="тип" show={typeVisible} onHide={()=>setTypeVisible(false)} />
-                <TypeAuthorCreate what="автор" show={authorVisible} onHide={() => setAuthorVisible(false)} />
+                <TypeAuthorCreate what="тип" add={handleAddType} show={typeVisible} onHide={()=>setTypeVisible(false)} />
+                <TypeAuthorCreate what="автор" add={handleAddAuthor} show={authorVisible} onHide={() => setAuthorVisible(false)} />
                 <ProjectCreate show={projectVisible} onHide={() => setProjectVisible(false)} />
 
             </div>

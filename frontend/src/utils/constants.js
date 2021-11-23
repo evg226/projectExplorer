@@ -4,3 +4,5 @@ export const SIGNUP_ROUTE = "/signup";
 export const DESK_ROUTE = "/";
 export const SELECTED_DESK = "/basket";
 export const PROJECT_ROUTE = "/project";
+
+export const baseURL='http://localhost:5000/';

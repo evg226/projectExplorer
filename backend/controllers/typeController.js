@@ -3,7 +3,7 @@ const ApiError = require("../errors/apiError");
 const { Type } = require("../models/models");
 
 class TypeController {
-    async create(request, response) {
+    async create(request, response,next) {
         try {
             const { name } = request.body;
             const type = await Type.create({ name });

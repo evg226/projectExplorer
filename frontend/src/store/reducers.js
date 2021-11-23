@@ -1,7 +1,7 @@
 import {
     ADD_AUTHORS,
     ADD_PROJECTS,
-    ADD_TYPES,
+    ADD_TYPES, INSERT_AUTHOR, INSERT_PROJECT, INSERT_TYPE,
     SET_SELECTED_AUTHOR,
     SET_SELECTED_PROJECT,
     SET_SELECTED_TYPE,
@@ -57,15 +57,40 @@ export const reducerProjects=(state = initialProjects , action) => {
                 ...state,
                 types:action.payload
             };
+        case INSERT_TYPE:
+            return {
+                ...state,
+                types: [
+                    ...state.types,
+                    action.payload
+                ]
+            }
         case ADD_AUTHORS:
             return {
                 ...state,
                 authors:action.payload
             };
+        case INSERT_AUTHOR:
+            return {
+                ...state,
+                authors: [
+                    ...state.authors,
+                    action.payload
+                ]
+            };
         case ADD_PROJECTS:
             return {
                 ...state,
                 projects:action.payload
+            };
+        case INSERT_PROJECT:
+            return {
+               ...state,
+                projects: [
+                    ...state.projects,
+                    action.payload
+                ]
+
             };
         default:
             return state;

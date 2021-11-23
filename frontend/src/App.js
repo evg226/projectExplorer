@@ -13,7 +13,7 @@ function App() {
     const dispatch=useDispatch();
     useEffect(()=> {
         dispatch(appLoading());
-    },[]);
+    },[dispatch]);
     return  user.loading
         ?
               <Container style={{height:window.innerWidth}} className="d-flex justify-content-center align-items-center">

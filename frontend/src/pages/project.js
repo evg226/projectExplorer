@@ -4,23 +4,22 @@ import {useParams} from "react-router";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {getSelectedProject} from "../store/selectors";
 import { loadProject} from "../store/action";
+import {baseURL} from "../utils/constants";
 
 export const Project = () => {
-
-
     const {id}=useParams();
     const dispatch=useDispatch();
-    const project=useSelector(getSelectedProject,shallowEqual);
-    // console.log(project);
-    // console.log(id);
+    const projectItem=useSelector(getSelectedProject,shallowEqual);
+    const project=projectItem.data;
+
     useEffect(()=>{
         dispatch(loadProject(id));
-    },[id]);
+    },[id,dispatch]);
 
     const [currentImg, setCurrentImg] = useState(0);
 
     const handleImageChange = () => {
-        if (currentImg < project.imgs.length - 1) {
+        if (currentImg < project.img.length - 1) {
             setCurrentImg(prev=>prev+1);
         } else {
             setCurrentImg(0);
@@ -30,30 +29,31 @@ export const Project = () => {
     return (
         <div>
             {
-                !project.loaded ?
+                !projectItem.loaded ?
                     <Container>
                         <h4>Загрузка данных...</h4>
                         {
-                            project.loading?
+                            projectItem.loading?
                                 <Spinner animation={"border"} variant={"secondary"} />
                                 :
-                                project.error
+                                projectItem.error
                         }
                     </Container>
                     :
                     <Container>
                         <Row>
                             <Col md={6} style={{cursor: "pointer"}} onClick={handleImageChange}>
-                                <Image width={"100%"} src={project.data.imgs&&project.data.imgs[currentImg].path}
-                                       alt={project.data.imgs?project.data.imgs[currentImg].path:"No images in this"}/>
+                                <Image width={"100%"}
+                                       src={project.img && baseURL+project.img[currentImg].path}
+                                       alt={project.img?project.img[currentImg].name:"No images in this"}/>
                                 <span>{">>"}</span>
 
                             </Col>
                             <Col md={6}>
-                                <h2>{project.data.name}</h2>
-                                <h5>Rating: <Image width={25} src="/star.png"/>{project.data.rating}</h5>
+                                <h2>{project.name}</h2>
+                                <h5>Rating: <Image width={25} src="/star.png"/>{project.rating}</h5>
                                 <h4>Stack</h4>
-                                {project.data.stacks && project.data.stacks.map(item =>
+                                {project.stack && project.stack.map(item =>
                                     <Row key={item.id}>
                                         <Col sm={2}>{item.name}</Col>
                                         <Col sm={4}>{item.description}</Col>
@@ -63,7 +63,7 @@ export const Project = () => {
                         </Row>
                         <Row>
                             <h4>Рецензии</h4>
-                            {project.data.ratings && project.data.ratings.map(item =>
+                            {project.rating && project.rating.map(item =>
                                 <Row key={item.id} className="my-2">
                                     <Col sm={2}>{item.name} <Image width={40} src="/star.png"/></Col>
                                     <Col className="d-flex align-items-center" sm={4}>{item.description}</Col>

@@ -7,7 +7,7 @@ const ApiError = require("../errors/apiError");
 class ProjectController {
     async create(request, response, next) {
         try {
-            let {
+            const {
                 name,
                 description,
                 start,
@@ -17,37 +17,47 @@ class ProjectController {
                 stack
             } = request.body; //получаем данные по проекту
 
+            let {icon,image} = request.files;
+
+            let fileName = uuid.v4() + ".png"; // генерируем уникальное имя файла
+            if (icon) {
+                icon.mv(path.resolve(__dirname, "..", "static", fileName)); //размещаем полученный файл на сервере
+            }
+
             const project = await Project.create({ //создание проекта в БД
                 name,
                 description,
                 start,
                 finish,
                 typeId,
-                authorId
+                authorId,
+                icon:fileName
             });
 
-            if (stack) { //Добавление массива stack в БД
-                stack = JSON.parse(stack);
-                stack.foreach(item => {
-                    Stack.create({
-                        name:item.name,
-                        description: item.description,
-                        projectId:project.id
-                    });
-                });
-            };
-
-            if (image) {
-                const { image } = request.files; //получаем картинку по проекту
+            image=image.length?image:[image];
+            image.map(async (item) => {
                 let fileName = uuid.v4() + ".png"; // генерируем уникальное имя файла
-                image.mv(path.resolve(__dirname, "..", "static", fileName)); //размещаем полученный файл на сервере
-
+                item.mv(path.resolve(__dirname, "..", "static", fileName)); //размещаем полученный файл на сервере
                 const img = await Img.create({// создание рисунка с кодом проекта в БД
                     projectId: project.id,
                     name: project.name + " - основной",
                     path: fileName
                 });
+            });
+
+            if (stack) { //Добавление массива stack в БД
+                const stacks = JSON.parse(stack);
+
+                stacks.map(async (item) => {
+                    const newStack = await Stack.create({
+                        name:item.name,
+                        description: item.desc,
+                        projectId:project.id
+                    });
+                    console.log(newStack);
+                });
             };
+
             return response.json(project);
 
         } catch (error) {
@@ -63,7 +73,7 @@ class ProjectController {
         let project;
         // фильтр по автору и типу проекта и пагинацией
         if (!authorId && !typeId) {
-            project = await Project.findAndCountAll({limit,offset});    
+            project = await Project.findAndCountAll({limit,offset});
         };
         if (authorId && !typeId) {
             project = await Project.findAndCountAll({where:{authorId},limit,offset});
@@ -74,6 +84,7 @@ class ProjectController {
         if (authorId && typeId) {
             project = await Project.findAndCountAll({where:{authorId,typeId},limit,offset});
         }
+
         return response.json(project);
     }
 
@@ -81,9 +92,9 @@ class ProjectController {
         const id = request.params.id;                    // id получаем как параметр
         const project = await Project.findOne({
             where: { id },                               //фильтр по id
-            include: [{ model: Stack, as: "stack" }],   // получаем элементы из связанной сущности Stack
-            include: [{ model: Img, as: "img" }],         // получаем элементы из связанной сущности Img
-            include: [{ model: Rating, as: "rates" }]         // получаем элементы из связанной сущности Rating
+            include: [{ model: Stack, as: "stack" },   // получаем элементы из связанной сущности Stack
+            { model: Img, as: "img" },         // получаем элементы из связанной сущности Img
+            { model: Rating, as: "rates" }]         // получаем элементы из связанной сущности Rating
         });
         return response.json(project);
     }

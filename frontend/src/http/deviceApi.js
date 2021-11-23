@@ -1,7 +1,8 @@
 import {$host,$authHost} from "./index";
+// import {Author} from "../../../backend/models/models";
 
-export const createType= async (type) =>{
-    const responce = await $authHost.post("api/type",type);
+export const createType= async (typeName) =>{
+    const responce = await $authHost.post("api/type",{name:typeName});
     return  responce.data;
 };
 
@@ -10,8 +11,8 @@ export const fetchTypes = async () =>{
     return data;
 };
 
-export const createAuthor= async (author) =>{
-    const responce = await $authHost.post("api/author",author);
+export const createAuthor= async (authorName) =>{
+    const responce = await $authHost.post("api/author",{name:authorName});
     return  responce.data;
 };
 

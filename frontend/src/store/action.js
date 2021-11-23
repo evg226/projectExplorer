@@ -1,5 +1,13 @@
 import {check, signin, signup} from "../http/userApi";
-import {fetchAuthors, fetchProjectbyId, fetchProjects, fetchTypes} from "../http/deviceApi";
+import {
+    createAuthor,
+    createProject,
+    createType,
+    fetchAuthors,
+    fetchProjectbyId,
+    fetchProjects,
+    fetchTypes
+} from "../http/deviceApi";
 export const SET_USER = "USER::SET_USER";
 
 export const setUser = (user) => {
@@ -76,12 +84,31 @@ export const addTypes = (types)=>{
     }
 }
 
+export const INSERT_TYPE="PROJECTS::INSERT_TYPE";
+
+export const insertType = (type)=>{
+    return {
+        type:INSERT_TYPE,
+        payload:type
+    }
+}
+
+
 export const ADD_AUTHORS = "PROJECTS::ADD_AUTHORS";
 
 export const addAuthors = (authors)=>{
     return {
         type:ADD_AUTHORS,
         payload:authors
+    }
+}
+
+export const INSERT_AUTHOR="PROJECTS::INSERT_AUTHOR";
+
+export const insertAuthor = (author)=>{
+    return {
+        type:INSERT_AUTHOR,
+        payload:author
     }
 }
 
@@ -94,6 +121,15 @@ export const addProjects = (projects)=>{
     }
 }
 
+export const INSERT_PROJECT="PROJECTS::INSERT_PROJECT";
+
+export const insertProject = (project) => {
+    return {
+        type:INSERT_PROJECT,
+        payload:project
+    }
+}
+
 export const loadTypes = () => async(dispatch)=>{
     let types=[];
     try {
@@ -103,6 +139,26 @@ export const loadTypes = () => async(dispatch)=>{
         console.log(e.response.data.message);
     } finally {
         dispatch(addTypes(types));
+    }
+}
+
+export const insertTypeToDB =(typeName)=>async(dispatch)=>{
+    try {
+        const type = await createType(typeName);
+        dispatch(insertType(type));
+    } catch (e){
+        console.log(e.message);
+        console.log (e.response.data.message);
+    }
+}
+
+export const insertAuthorToDB =(authorName)=>async(dispatch)=>{
+    try {
+        const author = await createAuthor(authorName);
+        dispatch(insertAuthor(author));
+    } catch (e){
+        console.log(e.message);
+        console.log (e.response.data.message);
     }
 }
 
@@ -127,6 +183,41 @@ export const loadProjects = () => async(dispatch)=>{
         console.log(e.response.data.message);
     } finally {
         dispatch(addProjects(projects.rows));
+    }
+}
+
+export const insertProjectToDB =(project) => async (dispatch) => {
+    const formData=new FormData();
+    const {
+        name,
+        description,
+        start,
+        finish,
+        typeId,
+        authorId,
+        stack,
+        img,
+        imgs
+    } = project;
+    formData.append("name",name);
+    formData.append("description",description);
+    formData.append("start",start);
+    formData.append("finish",finish);
+    formData.append("typeId",typeId);
+    formData.append("authorId",authorId);
+    formData.append("stack",JSON.stringify(stack));
+    formData.append("icon",img);
+    for(let key in imgs){
+        formData.append("image",imgs[key]);
+    }
+    let newProject;
+    try{
+        newProject = await createProject(formData);
+    } catch (e) {
+        console.log(e);
+        console.log(e.response.data.message);
+    } finally {
+        console.log(newProject);
     }
 }
 
