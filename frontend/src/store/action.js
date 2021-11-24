@@ -8,6 +8,8 @@ import {
     fetchProjects,
     fetchTypes
 } from "../http/deviceApi";
+import {shallowEqual, useSelector} from "react-redux";
+import {getLimit} from "./selectors";
 export const SET_USER = "USER::SET_USER";
 
 export const setUser = (user) => {
@@ -42,6 +44,15 @@ export const setSeletedProject = (project) => {
     return {
         type: SET_SELECTED_PROJECT,
         payload:project
+    }
+}
+
+export const SET_ACTIVE_PAGE="PROJECTS::SET_ACTIVE_PAGE"
+
+export const setPage = (page) => {
+    return {
+        type: SET_ACTIVE_PAGE,
+        payload:page
     }
 }
 
@@ -174,15 +185,19 @@ export const loadAuthors = () => async(dispatch)=>{
     }
 }
 
-export const loadProjects = () => async(dispatch)=>{
+export const loadProjects = (page=1) => async(dispatch,getState)=>{
     let projects=[];
+    const limit=getState().projects.limit;
+    const selectedTypeId=getState().projects.selectedType.id;
+    const selectedAuthorId=getState().projects.selectedAuthor.id;
     try {
-        projects = await fetchProjects();
+        projects = await fetchProjects(selectedTypeId,selectedAuthorId,page,limit);
     } catch (e) {
         console.log(e);
         console.log(e.response.data.message);
     } finally {
-        dispatch(addProjects(projects.rows));
+        dispatch(addProjects(projects));
+        dispatch(setPage(page));
     }
 }
 
@@ -241,7 +256,5 @@ export const loadProject=(id)=>async (dispatch) =>{
     } finally {
         dispatch(setSeletedProject(project));
     }
-
-
-
 }
+

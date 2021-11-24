@@ -1,7 +1,7 @@
 import {
     ADD_AUTHORS,
     ADD_PROJECTS,
-    ADD_TYPES, INSERT_AUTHOR, INSERT_PROJECT, INSERT_TYPE,
+    ADD_TYPES, INSERT_AUTHOR, INSERT_PROJECT, INSERT_TYPE, SET_ACTIVE_PAGE,
     SET_SELECTED_AUTHOR,
     SET_SELECTED_PROJECT,
     SET_SELECTED_TYPE,
@@ -32,7 +32,11 @@ export const initialProjects = {
     selectedAuthor: {},
     selectedProject:{
         loading:false, error:"",loaded:false,data:{}
-    }
+    },
+    page:1,
+    totalCount:0,
+    limit:2
+
 }
 
 export const reducerProjects=(state = initialProjects , action) => {
@@ -81,7 +85,8 @@ export const reducerProjects=(state = initialProjects , action) => {
         case ADD_PROJECTS:
             return {
                 ...state,
-                projects:action.payload
+                projects:action.payload.rows,
+                totalCount: action.payload.count
             };
         case INSERT_PROJECT:
             return {
@@ -92,6 +97,11 @@ export const reducerProjects=(state = initialProjects , action) => {
                 ]
 
             };
+        case SET_ACTIVE_PAGE:
+            return {
+                ...state,
+                activePage:action.payload
+            }
         default:
             return state;
 

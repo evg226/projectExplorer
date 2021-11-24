@@ -26,8 +26,10 @@ export const createProject= async (project) =>{
     return  responce.data;
 };
 
-export const fetchProjects = async () =>{
-    const {data} = await $host.get("api/project");
+export const fetchProjects = async (typeId,authorId,page,limit=5) =>{
+    const {data} = await $host.get("api/project",{params:{
+           typeId,authorId,page,limit
+        }});
     return data;
 };
 

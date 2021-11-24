@@ -3,6 +3,7 @@ import { Col, Container, Row } from 'react-bootstrap'
 import { AuthorBar } from '../components/authorBar';
 import { ProjectList } from '../components/projectList';
 import { TypeBar } from '../components/typeBar'
+import {Pages} from "../components/pages";
 
 export const  Desk = () => {
     return (
@@ -14,6 +15,7 @@ export const  Desk = () => {
                 <Col sm={9}>
                     <AuthorBar />
                     <ProjectList />
+                    <Pages />
                 </Col>
             </Row>
 
