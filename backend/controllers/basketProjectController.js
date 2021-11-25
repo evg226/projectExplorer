@@ -6,14 +6,15 @@ const { BasketProject, Basket } = require("../models/models");
 class BasketProjectController {
     async create(request, response,next) {
         try {
-            const { projectId } = request.body;
-            // const basket = await Basket.findAll();
-            let basketProject = await BasketProject.findOne({ where: { projectId } });
+            const { projectId } = request.body; //Получаем id проекта, который нужно добавить в избранное
+            const userId=request.user.id; //Получаем id пользователя, в избранное которого нужно добавить проект
+            const basket = await Basket.findOne({where:{userId}}); //получаем id избранного (корзины) пользователя
+            const basketId=basket.id;
+            let basketProject = await BasketProject.findOne({ where: { basketId,projectId } }); //Проверяем добавлен ли проект в корзину проектов пользователя
             if (basketProject) {
-                return next(ApiError.badRequest("Проект уже в избранных")); 
+                return next(ApiError.badRequest("Проект уже в избранных"));
             }
-            const basket = await Basket.findOne({ where: { userId: request.user.id } });
-            basketProject = await BasketProject.create({
+            basketProject = await BasketProject.create({  //вставляем проект в корзину проектов пользователя
                 basketId: basket.id,
                 projectId
             });
