@@ -20,9 +20,7 @@ export const TypeBar=()=> {
     }
     
     return (
-        <div>
-            
-            <ListGroup className="pt-2">
+            <ListGroup  className="pt-2">
                 <ListGroup.Item
                     variant="secondary"
                     action
@@ -34,6 +32,7 @@ export const TypeBar=()=> {
                 {
                     types.map(item =>
                         <ListGroup.Item
+
                             variant="secondary"
                             action
                             active={item.id === selectedType.id}
@@ -45,8 +44,7 @@ export const TypeBar=()=> {
                     )
                 }
             </ListGroup>
-        </div>  
-    );
+     );
 }
 
 

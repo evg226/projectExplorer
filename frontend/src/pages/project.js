@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {Button, Col, Container, Image, Row, Spinner} from 'react-bootstrap'
 import {useParams} from "react-router";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
-import {getSelectedProject} from "../store/selectors";
+import {getBasket, getSelectedProject, getUser} from "../store/selectors";
 import {insertBasketProject, loadProject} from "../store/action";
 import {baseURL} from "../utils/constants";
 
@@ -11,9 +11,19 @@ export const Project = () => {
     const dispatch=useDispatch();
     const projectItem=useSelector(getSelectedProject,shallowEqual);
     const project=projectItem.data;
+    const basket= useSelector(getBasket,shallowEqual);
+    const [isInBasket,setIsInBasket]=useState(false);
+    const user=useSelector(getUser,shallowEqual);
+
 
     useEffect(()=>{
         dispatch(loadProject(id));
+        console.log(user);
+        if (user.isAuth) {
+
+            const inBasket = !!(basket.projects.find(item => parseInt(id) === item.id));
+            inBasket && setIsInBasket(true);
+        }
     },[id,dispatch]);
 
     const [currentImg, setCurrentImg] = useState(0);
@@ -23,6 +33,13 @@ export const Project = () => {
             setCurrentImg(prev=>prev+1);
         } else {
             setCurrentImg(0);
+        }
+    }
+
+    const handleClickBasket=()=>{
+        if(!isInBasket) {
+            dispatch(insertBasketProject(id));
+            setIsInBasket(user.isAuth);
         }
     }
 
@@ -41,6 +58,7 @@ export const Project = () => {
                     </Container>
                     :
                     <Container>
+                        <h2 className="my-3  text-center">{project.name}</h2>
                         <Row>
                             <Col md={6} style={{cursor: "pointer"}} onClick={handleImageChange}>
                                 <Image width={"100%"}
@@ -49,13 +67,13 @@ export const Project = () => {
                                 <span>{">>"}</span>
                             </Col>
                             <Col md={6}>
-                                <h2>{project.name}</h2>
+                                <h5>{project.description}</h5>
                                 <h5>Rating: <Image width={25} src="/star.png"/>{project.rating}</h5>
                                 <Button
                                     variant={"secondary"}
                                     className={"my-3"}
-                                    onClick={()=>dispatch(insertBasketProject(id))}
-                                    >Добавить в избранное</Button>
+                                    onClick={handleClickBasket}
+                                    >{isInBasket?"Удалить из избранных":"Добавить в избранное"}</Button>
                                 <h4>Stack</h4>
                                 {project.stack && project.stack.map(item =>
                                     <Row key={item.id}>

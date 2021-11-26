@@ -26,13 +26,13 @@ export const AuthorBar=()=> {
         dispatch(loadProjects(1));
     }
     return (
-        <Row className="d-flex justify-content-start mt-2">
-            <Col className="px-1 text-center">
+        <>
+            <Col xs={12} sm={5} md={"auto"}  className="text-center px-0 mx-sm-1 my-sm-2 ">
                 <Card
-                    text={(!selectedAuthor.id)?"dark":"secondary"}
+                    text={(!selectedAuthor.id)?"light":"secondary"}
                     style={{ cursor: "pointer"}}
-                    border={(!selectedAuthor.id )?"dark":"light"}
-                    className="p-3 hover"
+                    bg={(!selectedAuthor.id )?"secondary":"light"}
+                    className="hover p-2"
                     onClick={()=>handleClickItem()}
                 >
                     Все авторы
@@ -40,12 +40,12 @@ export const AuthorBar=()=> {
             </Col>
                  {
                     authors.map(item =>
-                        <Col key={item.id} className="px-1 text-center">
+                        <Col xs={12} sm={5} md={"auto"} key={item.id} className="text-center px-0 mx-sm-1 my-sm-2">
                             <Card
-                                text={(item.id ===  selectedAuthor.id )?"dark":"secondary"}
+                                text={(item.id ===  selectedAuthor.id )?"light":"secondary"}
                                 style={{ cursor: "pointer"}}
-                                border={(item.id ===  selectedAuthor.id )?"dark":"light"}
-                                className="p-3 hover"
+                                bg={(item.id ===  selectedAuthor.id )?"secondary":"light"}
+                                className="hover p-2"
                                 onClick={()=>handleClickItem(item)}
                             >
                                 {item.name}
@@ -53,7 +53,7 @@ export const AuthorBar=()=> {
                         </Col>
                     )
                 }
-        </Row>  
+        </>
     );
 }
 

@@ -11,12 +11,11 @@ export const ProjectList=({isBasket})=> {
     if (isBasket) projects=basket.projects;
 
     return (
-        <Row className="d-flex mt-4">
+        <>
             {
-                projects.map(project => <ProjectItem item={project} key={ project.id}/>)
+                projects.map(project => <ProjectItem isBasket={isBasket} item={project} key={ project.id}/>)
             }
-
-        </Row>    
+        </>
     )
 }
 

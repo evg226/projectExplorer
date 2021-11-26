@@ -7,15 +7,19 @@ import {Pages} from "../components/pages";
 
 export const  Desk = () => {
     return (
-        <Container>
-            <h2>Проекты</h2>
+        <Container >
+            <h2 className="my-3  text-center">Проекты</h2>
             <Row>
-                <Col sm={3}>
+                <Col xs={12} sm={4} md={3} xl={2}>
                     <TypeBar />
                 </Col>
-                <Col sm={9}>
-                    <AuthorBar />
-                    <ProjectList />
+                <Col xs={12} sm={8} md={9}  xl={10}>
+                    <Row xs={11} className={"my-2 d-flex justify-content-center justify-content-sm-start mx-0"}>
+                        <AuthorBar />
+                    </Row>
+                    <Row className="d-flex mt-4">
+                        <ProjectList />
+                    </Row>
                     <Pages />
                 </Col>
             </Row>

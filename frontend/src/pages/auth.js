@@ -22,7 +22,6 @@ export const  Auth = () => {
     }
 
     return (
-        <div>
             <Container className="d-flex justify-content-center align-items-center"
                                 style={{height:window.innerHeight-50,minWidth:320}}>
                 <Card style={{width:600,maxWidth:window.innerWidth}} className="p-5">
@@ -44,7 +43,7 @@ export const  Auth = () => {
                     </Form>
                 </Card>
             </Container>
-        </div>
+
     )
 }
 

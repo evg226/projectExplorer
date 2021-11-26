@@ -21,7 +21,7 @@ export const Admin = () => {
 
     return (
         <Container>
-            <h2>Панель управления</h2>
+            <h2 className="my-3  text-center">Административная панель</h2>
             <div className="d-flex">
                 <Button variant={"outline-dark"} onClick={()=>setTypeVisible(true)}>
                     Добавить тип проекта

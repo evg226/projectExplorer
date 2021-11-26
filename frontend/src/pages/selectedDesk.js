@@ -8,17 +8,15 @@ import {Pages} from "../components/pages";
 export const  SelectedDesk = () => {
     return (
             <Container>
-                <h2>Избранные проекты</h2>
-                <Row>
-                    {/*<Col sm={3}>*/}
-                    {/*    <TypeBar />*/}
-                    {/*</Col>*/}
-                    <Col sm={12}>
+                <h2 className="my-3  text-center">Избранные проекты</h2>
+                <Row className="d-flex mt-4">
+                    {/*<Col  >*/}
                         {/*<AuthorBar />*/}
                         <ProjectList isBasket={true} />
                         {/*<Pages />*/}
-                    </Col>
+                    {/*</Col>*/}
                 </Row>
+
             </Container>
 
     )
