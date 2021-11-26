@@ -14,7 +14,9 @@ const generateJwt = (id, email, role)=>{
 class UserController {
 
     async signup(request, response,next) {
-        const { email, password, role } = request.body; // получаем данные по регистрации пользователя
+        const { email, password  } = request.body; // получаем данные по регистрации пользователя
+
+        const role = request.user&&request.user.role==="ADMIN"?request.user.role:"USER"
         // проверка на валидность
             if (!email || !password) {
                 return next(ApiError.badRequest("Некорректный email или password"));

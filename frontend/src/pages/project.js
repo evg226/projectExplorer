@@ -18,10 +18,8 @@ export const Project = () => {
 
     useEffect(()=>{
         dispatch(loadProject(id));
-        console.log(user);
         if (user.isAuth) {
-
-            const inBasket = !!(basket.projects.find(item => parseInt(id) === item.id));
+    const inBasket = !!(basket.projects.find(item => parseInt(id) === item.id));
             inBasket && setIsInBasket(true);
         }
     },[id,dispatch]);
