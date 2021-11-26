@@ -1,7 +1,7 @@
 import {
     ADD_AUTHORS,
     ADD_PROJECTS,
-    ADD_TYPES, INSERT_AUTHOR, INSERT_PROJECT, INSERT_TYPE, SET_ACTIVE_PAGE,
+    ADD_TYPES, INSERT_AUTHOR, INSERT_PROJECT, INSERT_TYPE, LOAD_BASKET, SET_ACTIVE_PAGE,
     SET_SELECTED_AUTHOR,
     SET_SELECTED_PROJECT,
     SET_SELECTED_TYPE,
@@ -36,7 +36,19 @@ export const initialProjects = {
     page:1,
     totalCount:0,
     limit:2
+}
 
+export const reducerBasket = (state={basket:{}},action) => {
+    switch (action.type) {
+        case LOAD_BASKET:
+            return {
+                basketId:action.payload.basketId,
+                projects:action.payload.projects,
+            }
+
+        default:
+            return state
+    }
 }
 
 export const reducerProjects=(state = initialProjects , action) => {

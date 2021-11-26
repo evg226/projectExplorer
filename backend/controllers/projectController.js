@@ -1,7 +1,7 @@
 require("dotenv").config(); //загрузка переменных окружения
 const uuid = require("uuid");
 const path = require("path");
-const { Project, Img, Stack, Rating } = require("../models/models");
+const { Project, Img, Stack, Rating, Type} = require("../models/models");
 const ApiError = require("../errors/apiError");
 
 class ProjectController {
@@ -72,19 +72,11 @@ class ProjectController {
         let offset = page * limit - limit; //начальный номер выборки
         let project;
         // фильтр по автору и типу проекта и пагинацией
-        if (!authorId && !typeId) {
-            project = await Project.findAndCountAll({limit,offset});
-        };
-        if (authorId && !typeId) {
-            project = await Project.findAndCountAll({where:{authorId},limit,offset});
-        };
-        if (!authorId && typeId) {
-            project = await Project.findAndCountAll({where:{typeId},limit,offset});
-        };
-        if (authorId && typeId) {
-            project = await Project.findAndCountAll({where:{authorId,typeId},limit,offset});
-        }
-
+        let condition={limit,offset,include:{model:Type}};
+        if (authorId && !typeId) condition={...condition,where:{authorId}};
+        if (!authorId && typeId) condition={...condition,where:{typeId}};
+        if (authorId && typeId) condition={...condition,where:{typeId,authorId}};
+        project = await Project.findAndCountAll(condition);
         return response.json(project);
     }
 

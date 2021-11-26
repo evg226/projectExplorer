@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
-import {Col, Container, Image, Row, Spinner} from 'react-bootstrap'
+import {Button, Col, Container, Image, Row, Spinner} from 'react-bootstrap'
 import {useParams} from "react-router";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {getSelectedProject} from "../store/selectors";
-import { loadProject} from "../store/action";
+import {insertBasketProject, loadProject} from "../store/action";
 import {baseURL} from "../utils/constants";
 
 export const Project = () => {
@@ -47,11 +47,15 @@ export const Project = () => {
                                        src={project.img && baseURL+project.img[currentImg].path}
                                        alt={project.img?project.img[currentImg].name:"No images in this"}/>
                                 <span>{">>"}</span>
-
                             </Col>
                             <Col md={6}>
                                 <h2>{project.name}</h2>
                                 <h5>Rating: <Image width={25} src="/star.png"/>{project.rating}</h5>
+                                <Button
+                                    variant={"secondary"}
+                                    className={"my-3"}
+                                    onClick={()=>dispatch(insertBasketProject(id))}
+                                    >Добавить в избранное</Button>
                                 <h4>Stack</h4>
                                 {project.stack && project.stack.map(item =>
                                     <Row key={item.id}>

@@ -8,3 +8,4 @@ export const getSelectedProject = (state) => state.projects.selectedProject;
 export const getPage = (state) => state.projects.activePage;
 export const getLimit = (state) => state.projects.limit;
 export const getTotalCount = (state) => state.projects.totalCount;
+export const getBasket=state=>state.basket;

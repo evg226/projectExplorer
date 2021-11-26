@@ -10,6 +10,7 @@ import {
 } from "../http/deviceApi";
 import {shallowEqual, useSelector} from "react-redux";
 import {getLimit} from "./selectors";
+import {createBasketProject, fetchBasket} from "../http/basket";
 export const SET_USER = "USER::SET_USER";
 
 export const setUser = (user) => {
@@ -56,6 +57,20 @@ export const setPage = (page) => {
     }
 }
 
+export const LOAD_BASKET="BASKET::ADD_BASKET"
+
+export const addBasket = (basket) => {
+    return {
+        type: LOAD_BASKET,
+        payload:basket
+    }
+}
+
+export const loadBasket = () => async(dispatch) => {
+    const basket=await fetchBasket();
+    dispatch(addBasket(basket));
+}
+
 export const getAuth = (isSignin,email,password)=>async(dispatch)=>{
     let user;
     try{
@@ -65,6 +80,7 @@ export const getAuth = (isSignin,email,password)=>async(dispatch)=>{
             user = await signup(email,password);
         };
         dispatch(setUser({name:user.email,isAuth:true}));
+        dispatch(loadBasket());
     }catch (e) {
         console.log(e.message);
         console.log(e.response.data.message);
@@ -77,6 +93,10 @@ export const checkAuth = ()=>async(dispatch)=>{
     try{
         const response=await check();
         user= { name: response.email, isAuth: true,loading:false};
+        if(response.id)  {
+            const basket=await fetchBasket();
+            dispatch(loadBasket());
+        };
     } catch (e){
         console.log(e.message);
         console.log(e.response.data.message);
@@ -188,10 +208,10 @@ export const loadAuthors = () => async(dispatch)=>{
 export const loadProjects = (page=1) => async(dispatch,getState)=>{
     let projects=[];
     const limit=getState().projects.limit;
-    const selectedTypeId=getState().projects.selectedType.id;
-    const selectedAuthorId=getState().projects.selectedAuthor.id;
+    const selectedType=getState().projects.selectedType;
+    const selectedAuthor=getState().projects.selectedAuthor;
     try {
-        projects = await fetchProjects(selectedTypeId,selectedAuthorId,page,limit);
+        projects = await fetchProjects(selectedType.id,selectedAuthor.id,page,limit);
     } catch (e) {
         console.log(e);
         console.log(e.response.data.message);
@@ -255,6 +275,17 @@ export const loadProject=(id)=>async (dispatch) =>{
         project={loading: false, error: e.response.data.message, loaded: false, data:{}};
     } finally {
         dispatch(setSeletedProject(project));
+    }
+}
+
+export const insertBasketProject= (projectId) =>async (dispatch)=>{
+    try {
+        const basketProject= await createBasketProject(projectId);
+        dispatch(loadBasket());
+        console.log(basketProject);
+    } catch (e) {
+        console.log(e);
+        console.log(e.response.data.message);
     }
 }
 

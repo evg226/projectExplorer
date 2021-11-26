@@ -1,6 +1,6 @@
 // Контроллер для работы с избранными проектами
 const ApiError = require("../errors/apiError");
-const { BasketProject, Basket } = require("../models/models");
+const { BasketProject, Basket, Project, Type, Author} = require("../models/models");
 
 
 class BasketProjectController {
@@ -25,12 +25,23 @@ class BasketProjectController {
     }
 
     async getAll(request, response) {
-        const { projectId } = request.query;
-        const basket = await Basket.findOne({ where: { userId: request.user.id } });
-        let condition = { basketId: basket.id };
-        if (projectId) condition = { ...condition, projectId };
-        const basketProject = await BasketProject.findAll({where: condition});
-        return response.json(basketProject);
+        const userId=request.user.id ;
+        const basket = await Basket.findOne({
+            where:{userId},
+            include:[{
+                model:BasketProject,
+                include:[{
+                    model:Project,
+                    include:{
+                        model:Type
+                    }
+                }]
+            }]
+        });
+
+        const basketId=basket.id;
+        const projects=basket.basket_projects.map(item=>item.project);
+        return response.json({basketId,projects});
     }
 };
 
