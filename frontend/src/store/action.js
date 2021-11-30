@@ -11,6 +11,7 @@ import {
 import {shallowEqual, useSelector} from "react-redux";
 import {getLimit} from "./selectors";
 import {createBasketProject, fetchBasket} from "../http/basket";
+import {createRating} from "../http/ratingApi";
 export const SET_USER = "USER::SET_USER";
 
 export const setUser = (user) => {
@@ -282,7 +283,17 @@ export const insertBasketProject= (projectId) =>async (dispatch)=>{
     try {
         const basketProject= await createBasketProject(projectId);
         dispatch(loadBasket());
-        console.log(basketProject);
+    } catch (e) {
+        console.log(e);
+        console.log(e.response.data.message);
+    }
+}
+
+export const insertRateToDB= (rateItem) =>async (dispatch)=>{
+    try {
+        const rating= await createRating(rateItem);
+        console.log(rating);
+        dispatch(loadProject(rateItem.projectId));
     } catch (e) {
         console.log(e);
         console.log(e.response.data.message);

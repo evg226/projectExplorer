@@ -1,7 +1,7 @@
 require("dotenv").config(); //загрузка переменных окружения
 const uuid = require("uuid");
 const path = require("path");
-const { Project, Img, Stack, Rating, Type} = require("../models/models");
+const { Project, Img, Stack, Rating, Type, User} = require("../models/models");
 const ApiError = require("../errors/apiError");
 
 class ProjectController {
@@ -86,7 +86,14 @@ class ProjectController {
             where: { id },                               //фильтр по id
             include: [{ model: Stack, as: "stack" },   // получаем элементы из связанной сущности Stack
             { model: Img, as: "img" },         // получаем элементы из связанной сущности Img
-            { model: Rating, as: "rates" }]         // получаем элементы из связанной сущности Rating
+            {
+                model: Rating,
+                as: "rates",
+                include:[{
+                    model:User,
+                    attributes:["email"]
+                }]
+            }]         // получаем элементы из связанной сущности Rating
         });
         return response.json(project);
     }

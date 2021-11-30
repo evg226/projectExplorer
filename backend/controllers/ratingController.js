@@ -19,21 +19,25 @@ class RatingController {
                 userId,
                 projectId
             });
-            
+            const ratings = await Rating.findAll({where:{projectId}});
+            const avg=ratings.reduce((acc, item) => {
+                return acc + item.rate
+            },0) / ratings.length;
+            // код для вставки среднего в Project
             return response.json(rating);
         } catch (error) {
             next(ApiError.badRequest(error.message)); //обработка ошибки в случае возникновения
         };
     }
 
-    async getAll(request, response) {
-        const { userId, projectId } = request.query;
-        let condition={};
-        if (userId) condition = { ...condition, userId };
-        if (projectId) condition = {...condition,projectId};
-        const rating = await Rating.findAll({where:condition});    
-        return response.json(rating);
-    }
+    // async getAll(request, response) {
+    //     const { userId, projectId } = request.query;
+    //     let condition={};
+    //     if (userId) condition = { ...condition, userId };
+    //     if (projectId) condition = {...condition,projectId};
+    //     const rating = await Rating.findAll({where:condition});
+    //     return response.json(rating);
+    // }
 };
 
 module.exports = new RatingController();
