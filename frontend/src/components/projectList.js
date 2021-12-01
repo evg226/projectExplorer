@@ -1,5 +1,4 @@
 import React from 'react'
-import { Row } from 'react-bootstrap';
 import { shallowEqual, useSelector } from 'react-redux'
 import {getBasket, getProjects} from '../store/selectors'
 import { ProjectItem } from './projectItem';

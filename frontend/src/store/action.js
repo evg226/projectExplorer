@@ -8,9 +8,7 @@ import {
     fetchProjects,
     fetchTypes
 } from "../http/deviceApi";
-import {shallowEqual, useSelector} from "react-redux";
-import {getLimit} from "./selectors";
-import {createBasketProject, fetchBasket} from "../http/basket";
+import {createBasketProject, deleteById, fetchBasket} from "../http/basket";
 import {createRating} from "../http/ratingApi";
 export const SET_USER = "USER::SET_USER";
 
@@ -67,6 +65,25 @@ export const addBasket = (basket) => {
     }
 }
 
+
+export const DELETE_FROM_BASKET="BASKET::DELETE_BY_ID";
+
+export const deleteFromBasket=(projectId)=>{
+    return {
+        type: DELETE_FROM_BASKET,
+        payload: projectId
+    }
+}
+
+export const ADD_TO_BASKET="BASKET::ADD_TO_BASKET";
+
+export const addToBasket=(project)=>{
+    return {
+        type:ADD_TO_BASKET,
+        payload: project
+    }
+}
+
 export const loadBasket = () => async(dispatch) => {
     const basket=await fetchBasket();
     dispatch(addBasket(basket));
@@ -95,7 +112,7 @@ export const checkAuth = ()=>async(dispatch)=>{
         const response=await check();
         user= { name: response.email, isAuth: true,loading:false};
         if(response.id)  {
-            const basket=await fetchBasket();
+            // const basket=await fetchBasket();
             dispatch(loadBasket());
         };
     } catch (e){
@@ -264,12 +281,14 @@ export const appLoading = ()=>dispatch=>{
     dispatch(loadProjects());
 }
 
-export const loadProject=(id)=>async (dispatch) =>{
+export const loadProject=(id)=>async (dispatch,getState) =>{
     dispatch(setSeletedProject({loading: true, error: "", loaded: false, data:{}}));
     let project={};
     try {
         const currentProject=await fetchProjectbyId(id);
-        project={loading: false, error: "", loaded: true, data:currentProject?currentProject:{id,name:"Не найдено"}};
+        const basket=getState().basket;
+        const isInBasket=basket.projects && basket.projects.find(item=>item.id===parseInt(id))?true:false;
+        project={loading: false, error: "", loaded: true, data:currentProject?{...currentProject,isInBasket}:{id,name:"Не найдено"}};
     }catch (e) {
         console.log(e);
         console.log(e.response.data.message);
@@ -279,21 +298,37 @@ export const loadProject=(id)=>async (dispatch) =>{
     }
 }
 
-export const insertBasketProject= (projectId) =>async (dispatch)=>{
+
+
+export const insertRateToDB= (rateItem) =>async (dispatch)=>{
     try {
-        const basketProject= await createBasketProject(projectId);
-        dispatch(loadBasket());
+        await createRating(rateItem);
+        dispatch(loadProject(rateItem.projectId));
     } catch (e) {
         console.log(e);
         console.log(e.response.data.message);
     }
 }
 
-export const insertRateToDB= (rateItem) =>async (dispatch)=>{
+export const insertBasketProject= (projectId) =>async (dispatch,getState)=>{
     try {
-        const rating= await createRating(rateItem);
-        console.log(rating);
-        dispatch(loadProject(rateItem.projectId));
+        await createBasketProject(projectId);
+        const projects=getState().projects.projects;
+        const project=projects&&projects.find(item=>item.id===parseInt(projectId));
+        dispatch(addToBasket(project));
+
+    } catch (e) {
+        console.log(e);
+        console.log(e.response.data.message);
+    }
+}
+
+export const deleteFromBasketDB = (projectId) => async (dispatch) => {
+    try {
+        const deleteResult = await deleteById(projectId);
+        console.log(deleteResult===1?`Удален ${projectId}`:`Не найден ${projectId}`);
+        if (deleteResult) dispatch (deleteFromBasket(projectId));
+
     } catch (e) {
         console.log(e);
         console.log(e.response.data.message);

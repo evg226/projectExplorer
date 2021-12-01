@@ -25,6 +25,7 @@ class BasketProjectController {
     }
 
     async getAll(request, response) {
+        if (!request.user) return;
         const userId=request.user.id ;
         const basket = await Basket.findOne({
             where:{userId},
@@ -43,6 +44,21 @@ class BasketProjectController {
         const projects=basket.basket_projects.map(item=>item.project);
         return response.json({basketId,projects});
     }
+
+    async deleteByProjectId(request,response,next){
+        try{
+            const userId=request.user.id;
+            const {projectId} = request.body;
+            // return response.json({userId,projectId});
+            const basket = await Basket.findOne({where:{userId}});
+            // const basketProject=await BasketProject.findOne ({where:{basketId:basket.id,projectId}});
+            const basketProject = await BasketProject.destroy({where:{basketId:basket.id,projectId}})
+            return response.json(basketProject);
+        } catch (error) {
+            return next(ApiError.badRequest(error.message)); //обработка ошибки в случае возникновения
+        };
+    }
+
 };
 
 module.exports = new BasketProjectController();

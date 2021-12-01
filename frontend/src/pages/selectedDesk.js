@@ -1,9 +1,6 @@
 import React from 'react'
-import {Col, Container, Row} from "react-bootstrap";
-import {TypeBar} from "../components/typeBar";
-import {AuthorBar} from "../components/authorBar";
+import { Container, Row} from "react-bootstrap";
 import {ProjectList} from "../components/projectList";
-import {Pages} from "../components/pages";
 
 export const  SelectedDesk = () => {
     return (

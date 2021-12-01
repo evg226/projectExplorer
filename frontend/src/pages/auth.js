@@ -29,7 +29,7 @@ export const  Auth = () => {
                     <Form className="d-flex flex-column">
                         <Form.Control className="mt-3" placeholder="Введите Ваш e-mail"
                                       value={email} onChange={e=>setEmail(e.target.value)}/>
-                        <Form.Control type="password" className="mt-3" placeholder="Введите Ваш пароль"
+                        <Form.Control type="password" autoComplete={password} className="mt-3" placeholder="Введите Ваш пароль"
                                       value={password} onChange={e=>setPassword(e.target.value)} />
                         <div className="d-flex justify-content-between mt-3 pl-3 pr-3">
                             {isSignin ?

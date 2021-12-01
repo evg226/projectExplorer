@@ -1,9 +1,8 @@
-import React, {Component, useState} from 'react';
+import React from 'react';
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
-import {getLimit, getPage, getProjects, getTotalCount} from "../store/selectors";
+import {getLimit, getPage,  getTotalCount} from "../store/selectors";
 import {Pagination} from "react-bootstrap";
 import {loadProjects} from "../store/action";
-
 
 export const Pages = ()=>{
     const dispatch=useDispatch();

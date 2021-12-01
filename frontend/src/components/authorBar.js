@@ -1,7 +1,7 @@
 import React from 'react'
-import { Card, Col, Row } from 'react-bootstrap';
+import { Card, Col } from 'react-bootstrap';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import {loadProjects, setSeletedAuthor, setSeletedType} from '../store/action';
+import {loadProjects, setSeletedAuthor} from '../store/action';
 import { getAuthors, getSelectedAuthor } from '../store/selectors';
 
 export const AuthorBar=()=> {

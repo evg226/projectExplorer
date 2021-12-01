@@ -1,5 +1,5 @@
 const ApiError = require("../errors/apiError");
-const { Rating } = require("../models/models");
+const { Rating, Project} = require("../models/models");
 
 class RatingController {
     async create(request, response,next) {
@@ -24,6 +24,8 @@ class RatingController {
                 return acc + item.rate
             },0) / ratings.length;
             // код для вставки среднего в Project
+            const updProjectRate=await Project.update({rating:avg},{where:{id:projectId}})
+
             return response.json(rating);
         } catch (error) {
             next(ApiError.badRequest(error.message)); //обработка ошибки в случае возникновения

@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react'
 import {Button, Carousel, Col, Container, Image, Row, Spinner} from 'react-bootstrap'
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
-import {getBasket, getSelectedProject, getUser} from "../store/selectors";
-import {insertBasketProject, insertRateToDB, loadProject} from "../store/action";
-import {baseURL} from "../utils/constants";
+import {getBasket, getSelectedProject} from "../store/selectors";
+import {deleteFromBasketDB, insertBasketProject, insertRateToDB, loadProject} from "../store/action";
+import {baseURL, SELECTED_DESK} from "../utils/constants";
 import {Rating} from "../components/modals/rating";
 
 export const Project = () => {
@@ -12,25 +12,21 @@ export const Project = () => {
     const dispatch=useDispatch();
     const projectItem=useSelector(getSelectedProject,shallowEqual);
     const project=projectItem.data;
-    const basket= useSelector(getBasket,shallowEqual);
-    const [isInBasket,setIsInBasket]=useState(false);
-    const user=useSelector(getUser,shallowEqual);
+    const basket=useSelector(getBasket,shallowEqual);
     const [isRatingVisible,setRatingVisible]=useState(false);
-
     useEffect(()=>{
         dispatch(loadProject(id));
-        if (user.isAuth) {
-         const inBasket = !!(basket.projects.find(item => parseInt(id) === item.id));
-            inBasket && setIsInBasket(true);
-        }
-    },[id,dispatch]);
+    },[id,dispatch,basket]);
 
-    const [currentImg, setCurrentImg] = useState(0);
+    const navigate=useNavigate();
 
     const handleClickBasket=()=>{
-        if(!isInBasket) {
+        if(!project.isInBasket) {
             dispatch(insertBasketProject(id));
-            setIsInBasket(user.isAuth);
+            // setIsInBasket(user.isAuth);
+        } else {
+            dispatch(deleteFromBasketDB(id));
+            navigate(SELECTED_DESK);
         }
     }
 
@@ -89,7 +85,7 @@ export const Project = () => {
                                 variant={"secondary"}
                                 className={"mt-3"}
                                 onClick={handleClickBasket}
-                            >{isInBasket?"Удалить из избранных":"Добавить в избранное"}</Button>
+                            >{project.isInBasket?"Удалить из избранных":"Добавить в избранное"}</Button>
                                 <Button
                                     variant={"secondary"}
                                     className={"mt-2 mb-3"}

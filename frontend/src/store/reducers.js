@@ -1,7 +1,7 @@
 import {
     ADD_AUTHORS,
-    ADD_PROJECTS,
-    ADD_TYPES, INSERT_AUTHOR, INSERT_PROJECT, INSERT_TYPE, LOAD_BASKET, SET_ACTIVE_PAGE,
+    ADD_PROJECTS, ADD_TO_BASKET,
+    ADD_TYPES, DELETE_FROM_BASKET, INSERT_AUTHOR, INSERT_PROJECT, INSERT_TYPE, LOAD_BASKET, SET_ACTIVE_PAGE,
     SET_SELECTED_AUTHOR,
     SET_SELECTED_PROJECT,
     SET_SELECTED_TYPE,
@@ -45,7 +45,20 @@ export const reducerBasket = (state={basket:{}},action) => {
                 basketId:action.payload.basketId,
                 projects:action.payload.projects,
             }
-
+        case DELETE_FROM_BASKET:
+            const projects=state.projects.filter(item=>item.id!==parseInt(action.payload));
+            return {
+                ...state,
+                projects
+            }
+        case ADD_TO_BASKET:
+             return {
+                ...state,
+                projects:[
+                    ...state.projects,
+                    action.payload
+                ]
+            }
         default:
             return state
     }
