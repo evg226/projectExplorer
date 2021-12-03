@@ -201,6 +201,78 @@ export const insertTypeToDB =(typeName)=>async(dispatch)=>{
     }
 }
 
+export const UPDATE_TYPE="PROJECTS_UPDATE_TYPE";
+export const updateType = (type)=>{
+    return {
+        type:UPDATE_TYPE,
+        payload:type
+    }
+}
+export const updateTypeToDB =(id,typeName)=>async(dispatch)=>{
+    try {
+        // const type = await createType(typeName);
+        const type={id,name:typeName};
+        dispatch(updateType(type));
+    } catch (e){
+        console.log(e.message);
+        console.log (e.response.data.message);
+    }
+}
+
+export const REMOVE_TYPE="PROJECTS_REMOVE_TYPE";
+export const removeType = (typeId)=>{
+    return {
+        type:REMOVE_TYPE,
+        payload:typeId
+    }
+}
+export const removeTypeToDB =(id)=>async(dispatch)=>{
+    try {
+        // const type = await createType(typeName);
+        dispatch(removeType(id));
+    } catch (e){
+        console.log(e.message);
+        console.log (e.response.data.message);
+    }
+}
+
+export const UPDATE_AUTHOR="PROJECTS_UPDATE_AUTHOR";
+export const updateAuthor = (type)=>{
+    return {
+        type:UPDATE_AUTHOR,
+        payload:type
+    }
+}
+export const updateAuthorToDB =(id,authorName)=>async(dispatch)=>{
+    try {
+        // const type = await createType(typeName);
+        const author={id,name:authorName};
+        dispatch(updateAuthor(author));
+    } catch (e){
+        console.log(e.message);
+        console.log (e.response.data.message);
+    }
+}
+
+export const REMOVE_AUTHOR="PROJECTS_REMOVE_AUTHOR";
+export const removeAuthor = (authorId)=>{
+    return {
+        type:REMOVE_AUTHOR,
+        payload:authorId
+    }
+}
+export const removeAuthorToDB =(id)=>async(dispatch)=>{
+    try {
+        // const type = await createType(typeName);
+        dispatch(removeAuthor(id));
+    } catch (e){
+        console.log(e.message);
+        console.log (e.response.data.message);
+    }
+}
+
+
+
 export const insertAuthorToDB =(authorName)=>async(dispatch)=>{
     try {
         const author = await createAuthor(authorName);
@@ -334,4 +406,5 @@ export const deleteFromBasketDB = (projectId) => async (dispatch) => {
         console.log(e.response.data.message);
     }
 }
+
 

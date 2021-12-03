@@ -1,11 +1,20 @@
 import {
     ADD_AUTHORS,
-    ADD_PROJECTS, ADD_TO_BASKET,
-    ADD_TYPES, DELETE_FROM_BASKET, INSERT_AUTHOR, INSERT_PROJECT, INSERT_TYPE, LOAD_BASKET, SET_ACTIVE_PAGE,
+    ADD_PROJECTS,
+    ADD_TO_BASKET,
+    ADD_TYPES,
+    DELETE_FROM_BASKET,
+    INSERT_AUTHOR,
+    INSERT_PROJECT,
+    INSERT_TYPE,
+    LOAD_BASKET, REMOVE_AUTHOR,
+    REMOVE_TYPE,
+    SET_ACTIVE_PAGE,
     SET_SELECTED_AUTHOR,
     SET_SELECTED_PROJECT,
     SET_SELECTED_TYPE,
-    SET_USER
+    SET_USER, UPDATE_AUTHOR,
+    UPDATE_TYPE
 } from "./action";
 
 const initialUser = {
@@ -127,6 +136,40 @@ export const reducerProjects=(state = initialProjects , action) => {
                 ...state,
                 activePage:action.payload
             }
+        case UPDATE_TYPE:{
+            const types=state.types.filter(item=>item.id!==parseInt(action.payload.id));
+            return {
+                ...state,
+                types:[
+                    ...types,
+                    action.payload
+                ]
+            }
+        }
+        case REMOVE_TYPE:{
+            const types=state.types.filter(item=>item.id!==parseInt(action.payload));
+            return {
+                ...state,
+                types
+            }
+        }
+        case UPDATE_AUTHOR:{
+            const authors=state.types.filter(item=>item.id!==parseInt(action.payload.id));
+            return {
+                ...state,
+                authors:[
+                    ...authors,
+                    action.payload
+                ]
+            }
+        }
+        case REMOVE_AUTHOR:{
+            const authors=state.types.filter(item=>item.id!==parseInt(action.payload));
+            return {
+                ...state,
+                authors
+            }
+        }
         default:
             return state;
 
