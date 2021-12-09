@@ -154,7 +154,7 @@ export const reducerProjects=(state = initialProjects , action) => {
             }
         }
         case UPDATE_AUTHOR:{
-            const authors=state.types.filter(item=>item.id!==parseInt(action.payload.id));
+            const authors=state.authors.filter(item=>item.id!==parseInt(action.payload.id));
             return {
                 ...state,
                 authors:[
@@ -164,7 +164,7 @@ export const reducerProjects=(state = initialProjects , action) => {
             }
         }
         case REMOVE_AUTHOR:{
-            const authors=state.types.filter(item=>item.id!==parseInt(action.payload));
+            const authors=state.authors.filter(item=>item.id!==parseInt(action.payload));
             return {
                 ...state,
                 authors

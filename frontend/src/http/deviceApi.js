@@ -38,3 +38,23 @@ export const fetchProjectbyId = async (id) =>{
     return data;
 };
 
+export const deleteType = async (id) =>{
+    const responce = await $authHost.delete("api/type",{data:{id}});
+    return  responce.data;
+};
+
+export const updType = async (id,name) =>{
+    const responce = await $authHost.put  ("api/type",{id,name});
+    return  responce.data;
+};
+
+export const deleteAuthor = async (id) =>{
+    const responce = await $authHost.delete("api/author",{data:{id}});
+    return  responce.data;
+};
+
+export const updAuthor = async (id,name) =>{
+    const responce = await $authHost.put  ("api/author",{id,name});
+    return  responce.data;
+};
+

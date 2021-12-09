@@ -20,7 +20,7 @@ class BasketProjectController {
             });
             return response.json(basketProject);
         } catch (error) {
-            return next(ApiError.badRequest(error.message)); //обработка ошибки в случае возникновения
+            next(ApiError.badRequest(error.message)); //обработка ошибки в случае возникновения
         };
     }
 

@@ -6,7 +6,8 @@ import {
     fetchAuthors,
     fetchProjectbyId,
     fetchProjects,
-    fetchTypes
+    fetchTypes,
+    deleteType, deleteAuthor, updType, updAuthor
 } from "../http/deviceApi";
 import {createBasketProject, deleteById, fetchBasket} from "../http/basket";
 import {createRating} from "../http/ratingApi";
@@ -210,9 +211,8 @@ export const updateType = (type)=>{
 }
 export const updateTypeToDB =(id,typeName)=>async(dispatch)=>{
     try {
-        // const type = await createType(typeName);
-        const type={id,name:typeName};
-        dispatch(updateType(type));
+        const result = await updType(id,typeName);
+        if (result[0]) dispatch(updateType({id,name:typeName}));
     } catch (e){
         console.log(e.message);
         console.log (e.response.data.message);
@@ -228,8 +228,8 @@ export const removeType = (typeId)=>{
 }
 export const removeTypeToDB =(id)=>async(dispatch)=>{
     try {
-        // const type = await createType(typeName);
-        dispatch(removeType(id));
+        const result = await deleteType(id);
+        if (result) dispatch(removeType(id));
     } catch (e){
         console.log(e.message);
         console.log (e.response.data.message);
@@ -245,9 +245,9 @@ export const updateAuthor = (type)=>{
 }
 export const updateAuthorToDB =(id,authorName)=>async(dispatch)=>{
     try {
-        // const type = await createType(typeName);
-        const author={id,name:authorName};
-        dispatch(updateAuthor(author));
+        const result = await updAuthor(id,authorName);
+        console.log(result);
+        if (result[0]) dispatch(updateAuthor({id,name:authorName}));
     } catch (e){
         console.log(e.message);
         console.log (e.response.data.message);
@@ -263,8 +263,8 @@ export const removeAuthor = (authorId)=>{
 }
 export const removeAuthorToDB =(id)=>async(dispatch)=>{
     try {
-        // const type = await createType(typeName);
-        dispatch(removeAuthor(id));
+        const result = await deleteAuthor(id);
+        if (result) dispatch(removeAuthor(id));
     } catch (e){
         console.log(e.message);
         console.log (e.response.data.message);
