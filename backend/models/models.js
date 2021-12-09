@@ -78,16 +78,25 @@ Project.belongsTo(Type);
 Author.hasMany(Project);
 Project.belongsTo(Author);
 
-Project.hasMany(Rating, {as:"rates"});
+Project.hasMany(Rating, {
+    as:"rates",
+    onDelete:"CASCADE"
+});
 Rating.belongsTo(Project);
 
 Project.hasOne(BasketProject);
 BasketProject.belongsTo(Project);
 
-Project.hasMany(Img,{as:"img"});
+Project.hasMany(Img,{
+    as:"img",
+    onDelete:"CASCADE"
+});
 Img.belongsTo(Project);
 
-Project.hasMany(Stack,{as:"stack"});
+Project.hasMany(Stack,{
+    as:"stack",
+    onDelete:"CASCADE"
+});
 Stack.belongsTo(Project);
 
 // Type.belongsToMany(Author, { through: TypeAuthor });

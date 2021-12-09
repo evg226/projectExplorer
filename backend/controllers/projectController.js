@@ -1,4 +1,5 @@
 require("dotenv").config(); //загрузка переменных окружения
+const fs=require("fs");
 const uuid = require("uuid");
 const path = require("path");
 const { Project, Img, Stack, Rating, Type, User} = require("../models/models");
@@ -96,6 +97,34 @@ class ProjectController {
             }]         // получаем элементы из связанной сущности Rating
         });
         return response.json(project);
+    }
+
+    async remove(request, response, next) {
+        try {
+            // const {id} = request.body; //получаем данные по проекту
+            const id = parseInt(request.params.id);                    // id получаем как параметр
+            const images=await Img.findAll({where:{projectId:id}})
+            const result = await Project.destroy({where: {id}});
+            if (result) {
+                images && images.map(item=>{
+                    fs.unlinkSync(path.resolve(__dirname, "..", "static", item.path));
+                });
+            }
+            response.json(result);
+        } catch (error) {
+            next(ApiError.badRequest(error.message)); //обработка ошибки в случае возникновения
+        }
+    }
+
+    async update(request, response, next) {
+        try {
+            const id = parseInt(request.params.id);
+            const data = request.body; //получаем данные по проекту
+            const result = await Project.update(data,{where: {id}});
+            response.json(result);
+        } catch (error) {
+            next(ApiError.badRequest(error.message)); //обработка ошибки в случае возникновения
+        }
     }
 };
 
