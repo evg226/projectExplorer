@@ -87,6 +87,7 @@ export const addToBasket=(project)=>{
 
 export const loadBasket = () => async(dispatch) => {
     const basket=await fetchBasket();
+    console.log(basket);
     dispatch(addBasket(basket));
 }
 
@@ -98,7 +99,7 @@ export const getAuth = (isSignin,email,password)=>async(dispatch)=>{
         } else {
             user = await signup(email,password);
         };
-        dispatch(setUser({name:user.email,isAuth:true}));
+        dispatch(setUser({name:user.email,isAuth:true,role:user.role}));
         dispatch(loadBasket());
     }catch (e) {
         console.log(e.message);
@@ -111,7 +112,7 @@ export const checkAuth = ()=>async(dispatch)=>{
     let user = {name: "", isAuth: false,loading:false};
     try{
         const response=await check();
-        user= { name: response.email, isAuth: true,loading:false};
+        user= { name: response.email, isAuth: true,loading:false,role:response.role};
         if(response.id)  {
             // const basket=await fetchBasket();
             dispatch(loadBasket());
@@ -120,9 +121,7 @@ export const checkAuth = ()=>async(dispatch)=>{
         console.log(e.message);
         console.log(e.response.data.message);
     }
-    setTimeout(() => {
-        dispatch(setUser(user));
-    }, 1000);
+    dispatch(setUser(user));
 }
 
 export const ADD_TYPES = "PROJECTS::ADD_TYPES";
@@ -357,16 +356,19 @@ export const loadProject=(id)=>async (dispatch,getState) =>{
     dispatch(setSeletedProject({loading: true, error: "", loaded: false, data:{}}));
     let project={};
     try {
+
         const currentProject=await fetchProjectbyId(id);
         const basket=getState().basket;
-        const isInBasket=basket.projects && basket.projects.find(item=>item.id===parseInt(id))?true:false;
+        const isInBasket=basket.projects && !!basket.projects.find(item=>item.id&&(item.id===parseInt(id)))?true:false;
+
         project={loading: false, error: "", loaded: true, data:currentProject?{...currentProject,isInBasket}:{id,name:"Не найдено"}};
     }catch (e) {
         console.log(e);
-        console.log(e.response.data.message);
-        project={loading: false, error: e.response.data.message, loaded: false, data:{}};
+        e.response&&console.log(e.response.data.message);
+        project = {loading: false, error: e.response.data.message, loaded: false, data: {}};
     } finally {
         dispatch(setSeletedProject(project));
+
     }
 }
 

@@ -26,6 +26,7 @@ class BasketProjectController {
 
     async getAll(request, response) {
         if (!request.user) return;
+
         const userId=request.user.id ;
         const basket = await Basket.findOne({
             where:{userId},
@@ -41,7 +42,8 @@ class BasketProjectController {
         });
 
         const basketId=basket.id;
-        const projects=basket.basket_projects.map(item=>item.project);
+        const projectsALL=basket.basket_projects.map(item=>item.project);
+        const projects=projectsALL.filter(item=>item!==null);
         return response.json({basketId,projects});
     }
 

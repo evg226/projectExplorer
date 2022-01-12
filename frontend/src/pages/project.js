@@ -37,7 +37,7 @@ export const Project = () => {
     return (
         <div>
             {
-                !projectItem.loaded ?
+                !projectItem.loaded||!project||!project.id?
                     <Container>
                         <h4>Загрузка данных...</h4>
                         {

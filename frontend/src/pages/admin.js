@@ -1,21 +1,16 @@
 import React, { useState } from 'react'
 import {Button, ButtonGroup, Container, Tab, Table, Tabs} from 'react-bootstrap'
-import { ProjectCreate } from '../components/modals/project';
-import { TypeAuthorCreate } from '../components/modals/typeAuthor'
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {insertAuthorToDB, insertTypeToDB} from "../store/action";
-import {getAuthors, getProjects, getTypes} from "../store/selectors";
+import {getAuthors, getProjects, getTypes, getUser} from "../store/selectors";
 import {ModalTypeAuthor} from "../components/modals/modalTypeAuthor";
-import {isVisible} from "bootstrap/js/src/util";
 
 export const Admin = () => {
-    const [typeVisible, setTypeVisible] = useState(false);
-    const [authorVisible, setAuthorVisible] = useState(false);
-    const [projectVisible, setProjectVisible] = useState(false);
     const dispatch=useDispatch();
     const types=useSelector(getTypes,shallowEqual);
     const authors=useSelector(getAuthors,shallowEqual);
     const projects=useSelector(getProjects,shallowEqual);
+    const user = useSelector(getUser, shallowEqual);
 
     const tabs=[
         {id:1,name:"Типы",data:types},
@@ -40,6 +35,7 @@ export const Admin = () => {
     }
 
     return (
+        user.role==="ADMIN"&&
         <Container>
             <h2 className="my-3  text-center">Административная панель</h2>
             {
@@ -93,20 +89,6 @@ export const Admin = () => {
                     )
                 }
             </Tabs>
-
-            {/*<div className="d-flex">*/}
-            {/*    <Button variant={"outline-dark"} onClick={()=>setTypeVisible(true)}>*/}
-            {/*        Добавить тип проекта*/}
-            {/*    </Button>*/}
-            {/*    <Button variant={"outline-dark"} className="mx-2" onClick={()=>setAuthorVisible(true)}>*/}
-            {/*        Добавить Автора*/}
-            {/*    </Button>*/}
-            {/*    <Button variant={"outline-dark"} onClick={()=>setProjectVisible(true)}>*/}
-            {/*        Добавить проект*/}
-            {/*    </Button>*/}
-            {/*    <TypeAuthorCreate what="тип" add={handleAddType} show={typeVisible} onHide={()=>setTypeVisible(false)} />*/}
-            {/*    <TypeAuthorCreate what="автор" add={handleAddAuthor} show={authorVisible} onHide={() => setAuthorVisible(false)} />*/}
-            {/*    <ProjectCreate show={projectVisible} onHide={() => setProjectVisible(false)} />*/}
 
             {/*</div>*/}
             

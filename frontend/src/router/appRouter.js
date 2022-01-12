@@ -8,16 +8,16 @@ import { getUser } from '../store/selectors';
 export const AppRouter = () => {
     const user = useSelector(getUser, shallowEqual);
     const isAuth = user.isAuth;
-
+    const role =user.role;
     return (
         <Routes>
             {  authRoutes.map(({ path, Component }) =>
                 <Route key={path} path={path}
                        element={
-                           isAuth ?
+                           isAuth?
                                Component
                                :
-                               <Navigate replace to={DESK_ROUTE}/>
+                               <Navigate replace to={SIGNIN_ROUTE}/>
                        }
                        exact />
             )}

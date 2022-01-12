@@ -14,8 +14,8 @@ export const signin = async (email,password) =>{
 };
 
 export const check= async () =>{
-    const responce = await $authHost.get("api/user/auth");
-    localStorage.setItem('token', responce.data.token);
-    return jwt_decode(responce.data.token);
+    const response = await $authHost.get("api/user/auth");
+    localStorage.setItem('token', response.data.token);
+    return jwt_decode(response.data.token);
 };
 

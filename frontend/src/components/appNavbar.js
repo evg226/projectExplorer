@@ -41,7 +41,7 @@ export const AppNavbar = () => {
                                 <NavDropdown.Item onClick={handleClickSignin}>{!isAuthed ? "Войти" : "Выйти"}</NavDropdown.Item>    
                                 <NavDropdown.Item onClick={()=>navigate(SIGNUP_ROUTE)}>Регистрация</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item disabled={!isAuthed} onClick={()=>navigate(ADMIN_ROUTE)}>Админ панель</NavDropdown.Item>
+                                <NavDropdown.Item disabled={user.role!=="ADMIN"} onClick={()=>navigate(ADMIN_ROUTE)}>Админ панель</NavDropdown.Item>
                             </NavDropdown>
                             
                             
