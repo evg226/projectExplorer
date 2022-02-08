@@ -44,7 +44,7 @@ export const initialProjects = {
     },
     page:1,
     totalCount:0,
-    limit:2
+    limit:9
 }
 
 export const reducerBasket = (state={basket:{}},action) => {

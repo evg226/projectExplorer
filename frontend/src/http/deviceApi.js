@@ -26,6 +26,16 @@ export const createProject= async (project) =>{
     return  responce.data;
 };
 
+export const updateProjectQuery= async (project) =>{
+    const responce = await $authHost.put("api/project/"+project.id,project);
+    return  responce.data;
+};
+
+export const deleteProjectQuery= async (id) =>{
+    const responce = await $authHost.delete("api/project/"+id);
+    return  responce.data;
+};
+
 export const fetchProjects = async (typeId,authorId,page,limit=5) =>{
     const {data} = await $host.get("api/project",{params:{
            typeId,authorId,page,limit

@@ -3,7 +3,13 @@ import { Button,Col,Form,  Modal, Row } from "react-bootstrap";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {getAuthors, getSelectedProject, getTypes} from "../../store/selectors";
 import { TypeAuthorCreate } from "./typeAuthor";
-import {createStackToDB, deleteStackToDB, insertProjectToDB} from "../../store/action";
+import {
+    createStackToDB,
+    deleteProjectToDB,
+    deleteStackToDB,
+    insertProjectToDB,
+    updateProjectToDB
+} from "../../store/action";
 
 export const ModalProject = ({ show, onHide,operation }) => {
     const dispatch=useDispatch();
@@ -53,19 +59,35 @@ export const ModalProject = ({ show, onHide,operation }) => {
             setStacks(prev => prev.filter(item => item.id !== id));
     }
 
-    const handleAddProject = ()=>{
-        const newProject={
-            name,
-            description,
-            start:startDate,
-            finish:endDate,
-            typeId:selectedType,
-            authorId:selectedAuthor,
-            stack:stacks,
-            img:icon,
-            imgs:images
-        };
-        dispatch(insertProjectToDB(newProject));
+    const handleProject = ()=>{
+
+        if (operation==="Удалить"){
+            dispatch(deleteProjectToDB(project.id));
+        } else if (operation==="Добавить") {
+            const newProject = {
+                name,
+                description,
+                start: startDate + "T00:00:00.000Z",
+                finish: endDate + "T00:00:00.000Z",
+                typeId: selectedType,
+                authorId: selectedAuthor,
+                stack: stacks,
+                img: icon,
+                imgs: images
+            }
+            dispatch(insertProjectToDB(newProject));
+        }   else {
+            const updProject = {
+                id: project.id,
+                name,
+                description,
+                start: startDate + "T00:00:00.000Z",
+                finish: endDate + "T00:00:00.000Z",
+                typeId: selectedType,
+                authorId: selectedAuthor,
+            }
+            dispatch(updateProjectToDB(updProject));
+        }
         onHide();
     }
 
@@ -169,7 +191,7 @@ export const ModalProject = ({ show, onHide,operation }) => {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-dark" onClick={onHide}>Отмена</Button>
-        <Button variant="outline-dark" onClick={handleAddProject}>{operation}</Button>
+        <Button variant="outline-dark" onClick={handleProject}>{operation}</Button>
       </Modal.Footer>
     </Modal>
   );

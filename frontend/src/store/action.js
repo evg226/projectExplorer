@@ -7,7 +7,14 @@ import {
     fetchProjectbyId,
     fetchProjects,
     fetchTypes,
-    deleteType, deleteAuthor, updType, updAuthor, createStackQuery, deleteStackQuery
+    deleteType,
+    deleteAuthor,
+    updType,
+    updAuthor,
+    createStackQuery,
+    deleteStackQuery,
+    deleteProjectQuery,
+    updateProjectQuery
 } from "../http/deviceApi";
 import {createBasketProject, deleteById, fetchBasket} from "../http/basket";
 import {createRating} from "../http/ratingApi";
@@ -425,3 +432,31 @@ export const deleteStackToDB =(id,projectId)=>async(dispatch)=>{
         console.log (e.response.data.message);
     }
 }
+
+export const deleteProjectToDB =(id)=>async(dispatch)=>{
+    try {
+        const result = await deleteProjectQuery(id);
+        console.log(result);
+        if (result)
+            dispatch(loadProjects());
+
+    } catch (e){
+        console.log(e.message);
+        console.log (e.response.data.message);
+    }
+}
+
+export const updateProjectToDB =(id)=>async(dispatch)=>{
+    try {
+        const result = await updateProjectQuery(id);
+        console.log(result);
+        if (result)
+            dispatch(loadProjects());
+
+    } catch (e){
+        console.log(e.message);
+        console.log (e.response.data.message);
+    }
+}
+
+

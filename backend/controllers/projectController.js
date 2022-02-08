@@ -17,6 +17,7 @@ class ProjectController {
                 authorId,
                 stack
             } = request.body; //получаем данные по проекту
+
             let {icon,image} = request.files;
 
             let fileName = uuid.v4() + ".png"; // генерируем уникальное имя файла
@@ -34,16 +35,19 @@ class ProjectController {
                 authorId,
                 icon:fileName
             });
-            return next(ApiError.badRequest(project)); //обработка ошибки в случае возникновения
 
             if (stack) { //Добавление массива stack в БД
                 const stacks = JSON.parse(stack);
                 stacks.map(async (item) => {
-                    const newStack = await Stack.create({
-                        name:item.name,
-                        description: item.description,
-                        projectId:project.id
-                    });
+                    try {
+                        const newStack = await Stack.create({
+                            name: item.name,
+                            description: item.description,
+                            projectId: project.id
+                        });
+                    } catch (e) {
+                        next(ApiError.badRequest(e.message)); //обработка ошибки в случае возникновения
+                    }
                 });
             };
 
@@ -52,11 +56,15 @@ class ProjectController {
                 image.map(async (item) => {
                     let fileName = uuid.v4() + ".png"; // генерируем уникальное имя файла
                     item.mv(path.resolve(__dirname, "..", "static", fileName)); //размещаем полученный файл на сервере
-                    const img = await Img.create({// создание рисунка с кодом проекта в БД
-                        projectId: project.id,
-                        name: project.name + " - основной",
-                        path: fileName
-                    });
+                    try {
+                        const img = await Img.create({// создание рисунка с кодом проекта в БД
+                            projectId: project.id,
+                            name: project.name + " - основной",
+                            path: fileName
+                        });
+                    } catch (e) {
+                    next(ApiError.badRequest(e.message)); //обработка ошибки в случае возникновения
+                    }
                 });
             }
 
@@ -108,7 +116,11 @@ class ProjectController {
             const result = await Project.destroy({where: {id}});
             if (result) {
                 images && images.map(item=>{
-                    fs.unlinkSync(path.resolve(__dirname, "..", "static", item.path));
+                    try {
+                        fs.unlinkSync(path.resolve(__dirname, "..", "static", item.path));
+                    } catch (error){
+                        console.log(error.message);
+                    }
                 });
             }
             response.json(result);

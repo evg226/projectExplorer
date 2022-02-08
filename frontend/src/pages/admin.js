@@ -5,6 +5,7 @@ import {getAuthors, getProjects, getTypes, getUser} from "../store/selectors";
 import {ModalTypeAuthor} from "../components/modals/modalTypeAuthor";
 import {ModalProject} from "../components/modals/ModalProject";
 import {loadProject, setSeletedProject} from "../store/action";
+import {Pages} from "../components/pages";
 
 export const Admin = () => {
     const dispatch=useDispatch();
@@ -106,7 +107,7 @@ export const Admin = () => {
                     )
                 }
             </Tabs>
-
+            {currentTab.id===3 && <Pages />}
             {/*</div>*/}
             
         </Container>
