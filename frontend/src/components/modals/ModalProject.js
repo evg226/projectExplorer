@@ -1,20 +1,21 @@
-import { useState } from "react";
-import { Button,Col,Dropdown,Form,  Modal, Row } from "react-bootstrap";
+import { useState} from "react";
+import { Button,Col,Form,  Modal, Row } from "react-bootstrap";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
-import { getAuthors, getTypes } from "../../store/selectors";
+import {getAuthors, getSelectedProject, getTypes} from "../../store/selectors";
 import { TypeAuthorCreate } from "./typeAuthor";
-import {insertProjectToDB} from "../../store/action";
+import {createStackToDB, deleteStackToDB, insertProjectToDB} from "../../store/action";
 
-export const ProjectCreate = ({ show, onHide }) => {
+export const ModalProject = ({ show, onHide,operation }) => {
+    const dispatch=useDispatch();
+    const project=useSelector(getSelectedProject,shallowEqual).data;
 
     const types = useSelector(getTypes, shallowEqual);
     const authors = useSelector(getAuthors, shallowEqual);
-    const dispatch=useDispatch();
 
-    const [name,setName]=useState("");
-    const [description,setDescription]=useState("");
+    const [name,setName]=useState(project.name||"");
+    const [description,setDescription]=useState(project.description);
 
-    const [icon,setIcon]=useState();
+    const [icon,setIcon]=useState(project.icon);
     const handleSelectIcon=(e)=>{
         setIcon(e.target.files[0]);
     }
@@ -23,25 +24,33 @@ export const ProjectCreate = ({ show, onHide }) => {
         setImages(e.target.files);
     }
 
-    const [selectedType,setSelectedType]=useState({});
-    const [selectedAuthor,setSelectedAuthor]=useState({});
+    const [selectedType,setSelectedType]=useState(project.typeId);
+    const [selectedAuthor,setSelectedAuthor]=useState(project.authorId);
 
-    const [startDate,setStartDate]=useState((new Date()).toISOString().split('T')[0]);
+    const [startDate,setStartDate]=useState((project.start?project.start:new Date().toISOString()).split('T')[0]);
     const handleChangeStartDate=(e)=>{
         setStartDate(e.target.value);
     }
-    const [endDate,setEndDate]=useState((new Date()).toISOString().split('T')[0]);
+    const [endDate,setEndDate]=useState((project.finish?project.finish:new Date().toISOString()).split('T')[0]);
     const handleChangeEndDate=(e)=>{
         setEndDate(e.target.value);
     }
 
     const [stackVisible, setStackVisible] = useState(false);
-    const [stacks, setStacks] = useState([]);
+    const [stacks, setStacks] = useState(   project.stack||[]);
+
+    const stackView=(operation==="Добавить")?stacks:(project.stack||[]);
     const addStack = (name, desc) => {
-        setStacks(prev => [...prev, { id: Date.now(), name, desc }]);
+        if (operation==="Изменить")
+            dispatch(createStackToDB(name,desc,project.id));
+        else
+            setStacks(prev => [...prev, { id: Date.now(), name, description:desc }]);
     };
     const removeStack = (id) => {
-        setStacks(prev => prev.filter(item => item.id !== id));
+        if (operation==="Изменить")
+            dispatch(deleteStackToDB(id,project.id));
+        else
+            setStacks(prev => prev.filter(item => item.id !== id));
     }
 
     const handleAddProject = ()=>{
@@ -50,8 +59,8 @@ export const ProjectCreate = ({ show, onHide }) => {
             description,
             start:startDate,
             finish:endDate,
-            typeId:selectedType.id,
-            authorId:selectedAuthor.id,
+            typeId:selectedType,
+            authorId:selectedAuthor,
             stack:stacks,
             img:icon,
             imgs:images
@@ -69,7 +78,7 @@ export const ProjectCreate = ({ show, onHide }) => {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-            Добавить проект
+            {operation} проект
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -88,24 +97,18 @@ export const ProjectCreate = ({ show, onHide }) => {
                       onChange={(e)=>setDescription(e.target.value)}
                   />
                   <div className="d-flex my-2">
-                      
-                  <Dropdown>
-                      <Dropdown.Toggle variant="secondary">{selectedAuthor.name || "Выберите автора"}</Dropdown.Toggle>
-                      <Dropdown.Menu>
+                      <Form.Select variant={"secondary"} value={selectedAuthor} onChange={e => setSelectedAuthor(e.target.value)}>
+                          <option value={0}>Автор</option>
                           {authors.map(item =>
-                              <Dropdown.Item key={item.id} onClick={()=>setSelectedAuthor(item)}>{item.name}</Dropdown.Item>
-                              )}
-                      </Dropdown.Menu>
-                      </Dropdown>
-                      <Dropdown className="mx-3">
-                      <Dropdown.Toggle variant="secondary">{selectedType.name || "Выберите тип"}</Dropdown.Toggle>
-                      <Dropdown.Menu>
+                              <option key={item.id} value={item.id}>{item.name}</option>
+                          )}
+                      </Form.Select>
+                      <Form.Select variant={"secondary"} value={selectedType} onChange={e => setSelectedType(e.target.value)}>
+                          <option value={0}>Тип</option>
                           {types.map(item =>
-                              <Dropdown.Item key={item.id} onClick={()=>setSelectedType(item)}>{item.name}</Dropdown.Item>
-                              )}
-                      </Dropdown.Menu>
-                  </Dropdown>
-
+                              <option key={item.id} value={item.id}>{item.name}</option>
+                          )}
+                      </Form.Select>
                   </div>
                   <div className="d-flex my-2 align-items-center">
                       <Form.Label className="my-0 text-secondary">Начало</Form.Label>
@@ -138,14 +141,14 @@ export const ProjectCreate = ({ show, onHide }) => {
                   <div className="d-flex my-2 align-items-center">
                       <Button variant="secondary" onClick={()=>setStackVisible(true)}>Добавить стек</Button>
                   </div>
-                  {stacks.length>0 &&
+                  {stackView.length>0 &&
                       <div className="my-2">
                           <Row className="d-flex p-1">
                               <Col sm={1}> </Col>
                               <Col sm={3}>Стек</Col>
                               <Col sm={6}>Описание</Col>
                           </Row>
-                          {stacks.map(item =>
+                          {stackView.map(item =>
                               <Row key={item.id} className="d-flex align-items-center border-top p-1">
                                   <Col sm={1}>
                                       <Button style={{ height: "90%" }} className="px-2 py-0" variant="outline-secondary"
@@ -153,7 +156,7 @@ export const ProjectCreate = ({ show, onHide }) => {
                                           x</Button>
                                   </Col>
                                   <Col className="text-secondary" sm={3}>{item.name}</Col>
-                                  <Col className="text-secondary" sm={6}>{item.desc}</Col>
+                                  <Col className="text-secondary" sm={6}>{item.description}</Col>
                               
                               </Row>
                           )}
@@ -166,7 +169,7 @@ export const ProjectCreate = ({ show, onHide }) => {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-dark" onClick={onHide}>Отмена</Button>
-        <Button variant="outline-dark" onClick={handleAddProject}>Добавить</Button>
+        <Button variant="outline-dark" onClick={handleAddProject}>{operation}</Button>
       </Modal.Footer>
     </Modal>
   );

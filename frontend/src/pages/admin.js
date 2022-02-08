@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import {Button, ButtonGroup, Container, Tab, Table, Tabs} from 'react-bootstrap'
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
-import {insertAuthorToDB, insertTypeToDB} from "../store/action";
 import {getAuthors, getProjects, getTypes, getUser} from "../store/selectors";
 import {ModalTypeAuthor} from "../components/modals/modalTypeAuthor";
+import {ModalProject} from "../components/modals/ModalProject";
+import {loadProject, setSeletedProject} from "../store/action";
 
 export const Admin = () => {
     const dispatch=useDispatch();
+
     const types=useSelector(getTypes,shallowEqual);
     const authors=useSelector(getAuthors,shallowEqual);
     const projects=useSelector(getProjects,shallowEqual);
@@ -21,32 +23,47 @@ export const Admin = () => {
     const [currentTab,setCurrentTab]=useState(tabs[0]);
     const [selectedItem,setSelectedItem]=useState(false);
     const [modalTypeAuthorOptions,setModalTypeAuthorOptions]=useState({isVisible:false});
+    const [modalProjectOptions,setModalProjectOptions]=useState({isVisible:false});
 
     const handleClick=(handleType)=>{
-        setModalTypeAuthorOptions({operation:handleType,isVisible:true});
+        if(currentTab.id===3) {
+            if(handleType==="Добавить"){
+                setSelectedItem(false);
+                dispatch(setSeletedProject({loading: false, error: false, loaded: true, data: {}}));
+            }
+            setModalProjectOptions({operation: handleType, isVisible: true});
+        }
+        else
+            setModalTypeAuthorOptions({operation:handleType,isVisible:true});
     }
 
-    const handleAddType= (typeName) => {
-        dispatch(insertTypeToDB(typeName));
+    const handleClickItem =(item)=>{
+        setSelectedItem(item);
+        if(currentTab.id===3) dispatch(loadProject(item.id));
     }
 
-    const handleAddAuthor= (authorName) => {
-        dispatch(insertAuthorToDB(authorName));
-    }
+    // const handleAddType= (typeName) => {
+    //     dispatch(insertTypeToDB(typeName));
+    // }
+    //
+    // const handleAddAuthor= (authorName) => {
+    //     dispatch(insertAuthorToDB(authorName));
+    // }
 
     return (
         user.role==="ADMIN"&&
         <Container>
             <h2 className="my-3  text-center">Административная панель</h2>
-            {
-                modalTypeAuthorOptions.isVisible &&
+            {modalTypeAuthorOptions.isVisible &&
                 <ModalTypeAuthor currentTab={currentTab} operation={modalTypeAuthorOptions.operation} selectedItem={selectedItem}
-                             show={modalTypeAuthorOptions.isVisible}
-                             onHide={() => setModalTypeAuthorOptions({isVisible: false})}/>
+                                 show={modalTypeAuthorOptions.isVisible}
+                                 onHide={() => setModalTypeAuthorOptions({isVisible: false})}/>}
+            {modalProjectOptions.isVisible &&
+                <ModalProject operation={modalProjectOptions.operation}
+                    show={modalProjectOptions.isVisible}
+                    onHide={() => setModalProjectOptions({isVisible: false})}/>
             }
-            {/*<TypeAuthorCreate what="тип" add={handleAddType} show={typeVisible} onHide={()=>setTypeVisible(false)} />*/}
-                {/*<TypeAuthorCreate what="автор" add={handleAddAuthor} show={authorVisible} onHide={() => setAuthorVisible(false)} />*/}
-                {/*<ProjectCreate show={projectVisible} onHide={() => setProjectVisible(false)} />*/}
+
             <Tabs
                 id="controlled-tab-example"
                 activeKey={currentTab.id}
@@ -69,7 +86,7 @@ export const Admin = () => {
                                     tab.data.map (item=>
                                         <tr className={ item===selectedItem ? "bg-secondary":""}
                                             key={item.id}
-                                            onClick={()=>setSelectedItem(item)}
+                                            onClick={()=>handleClickItem(item)}
                                         >
                                             <td>{item.id}</td>
                                             <td>{item.name}</td>

@@ -37,8 +37,9 @@ export const ModalTypeAuthor=({show,onHide,currentTab,operation,selectedItem})=>
                     dispatch(removeAuthorToDB(selectedItem.id));
                 };
                 break;
+                default:
         }
-    onHide();
+        onHide();
     }
 
     return (

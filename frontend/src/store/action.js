@@ -7,7 +7,7 @@ import {
     fetchProjectbyId,
     fetchProjects,
     fetchTypes,
-    deleteType, deleteAuthor, updType, updAuthor
+    deleteType, deleteAuthor, updType, updAuthor, createStackQuery, deleteStackQuery
 } from "../http/deviceApi";
 import {createBasketProject, deleteById, fetchBasket} from "../http/basket";
 import {createRating} from "../http/ratingApi";
@@ -87,7 +87,6 @@ export const addToBasket=(project)=>{
 
 export const loadBasket = () => async(dispatch) => {
     const basket=await fetchBasket();
-    console.log(basket);
     dispatch(addBasket(basket));
 }
 
@@ -270,8 +269,6 @@ export const removeAuthorToDB =(id)=>async(dispatch)=>{
     }
 }
 
-
-
 export const insertAuthorToDB =(authorName)=>async(dispatch)=>{
     try {
         const author = await createAuthor(authorName);
@@ -334,14 +331,12 @@ export const insertProjectToDB =(project) => async (dispatch) => {
     for(let key in imgs){
         formData.append("image",imgs[key]);
     }
-    let newProject;
     try{
-        newProject = await createProject(formData);
+        const newProject = await createProject(formData);
+        dispatch(loadProjects());
     } catch (e) {
         console.log(e);
         console.log(e.response.data.message);
-    } finally {
-        console.log(newProject);
     }
 }
 
@@ -409,4 +404,24 @@ export const deleteFromBasketDB = (projectId) => async (dispatch) => {
     }
 }
 
+export const createStackToDB =(name,description,projectId)=>async(dispatch)=>{
+    try {
+        const result = await createStackQuery(name,description,projectId);
+        if (result) dispatch(loadProject(projectId));
+    } catch (e){
+        console.log(e.message);
+        console.log (e.response.data.message);
+    }
+}
+export const deleteStackToDB =(id,projectId)=>async(dispatch)=>{
+    try {
+        const result = await deleteStackQuery(id,projectId);
+        console.log(result);
+        if (result)
+            dispatch(loadProject(projectId));
 
+    } catch (e){
+        console.log(e.message);
+        console.log (e.response.data.message);
+    }
+}

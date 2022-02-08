@@ -58,3 +58,12 @@ export const updAuthor = async (id,name) =>{
     return  responce.data;
 };
 
+export const createStackQuery= async (name,description,projectId) =>{
+    const responce = await $authHost.post(`api/project/${projectId}/stack/`,{name,description});
+    return  responce.data;
+};
+
+export const deleteStackQuery = async (id,projectId) =>{
+    const responce = await $authHost.delete(`api/project/${projectId}/stack/${id}`);
+    return  responce.data;
+};

@@ -8,7 +8,6 @@ import { getUser } from '../store/selectors';
 export const AppRouter = () => {
     const user = useSelector(getUser, shallowEqual);
     const isAuth = user.isAuth;
-    const role =user.role;
     return (
         <Routes>
             {  authRoutes.map(({ path, Component }) =>

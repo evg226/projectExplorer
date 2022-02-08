@@ -3,11 +3,11 @@ import { Button,Form, Modal } from "react-bootstrap";
 
 export const TypeAuthorCreate=({what,show,onHide,add})=> {
   const [name, setName] = useState("");
-  const [desc, setDesc] = useState("");
+  const [description, setDesc] = useState("");
   
   const handleAddButton = () => {
-    if (!!desc) {
-      add(name, desc);
+    if (!!description) {
+      add(name, description);
     }  else {
       add(name);
     }
@@ -33,7 +33,7 @@ export const TypeAuthorCreate=({what,show,onHide,add})=> {
               <Form>
           <Form.Control placeholder={`Название ${what}а`} value={name} onChange={e=>setName(e.target.value)}/>
           {what === "стек" && <Form.Control as="textarea" rows={3} className={"mt-2"}
-                                value={desc} onChange={(e)=>setDesc(e.target.value)} placeholder={`Описание ${what}а`} />}
+                                value={description} onChange={(e)=>setDesc(e.target.value)} placeholder={`Описание ${what}а`} />}
         </Form>
       </Modal.Body>
       <Modal.Footer>

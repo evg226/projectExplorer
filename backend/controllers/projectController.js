@@ -17,15 +17,15 @@ class ProjectController {
                 authorId,
                 stack
             } = request.body; //получаем данные по проекту
-
             let {icon,image} = request.files;
 
             let fileName = uuid.v4() + ".png"; // генерируем уникальное имя файла
+
             if (icon) {
                 icon.mv(path.resolve(__dirname, "..", "static", fileName)); //размещаем полученный файл на сервере
             }
 
-            const project = await Project.create({ //создание проекта в БД
+            const project = await Project.create({
                 name,
                 description,
                 start,
@@ -34,30 +34,31 @@ class ProjectController {
                 authorId,
                 icon:fileName
             });
-
-            image=image.length?image:[image];
-            image.map(async (item) => {
-                let fileName = uuid.v4() + ".png"; // генерируем уникальное имя файла
-                item.mv(path.resolve(__dirname, "..", "static", fileName)); //размещаем полученный файл на сервере
-                const img = await Img.create({// создание рисунка с кодом проекта в БД
-                    projectId: project.id,
-                    name: project.name + " - основной",
-                    path: fileName
-                });
-            });
+            return next(ApiError.badRequest(project)); //обработка ошибки в случае возникновения
 
             if (stack) { //Добавление массива stack в БД
                 const stacks = JSON.parse(stack);
-
                 stacks.map(async (item) => {
                     const newStack = await Stack.create({
                         name:item.name,
-                        description: item.desc,
+                        description: item.description,
                         projectId:project.id
                     });
-                    console.log(newStack);
                 });
             };
+
+            if (image) {
+                image = image.length? image : [image];
+                image.map(async (item) => {
+                    let fileName = uuid.v4() + ".png"; // генерируем уникальное имя файла
+                    item.mv(path.resolve(__dirname, "..", "static", fileName)); //размещаем полученный файл на сервере
+                    const img = await Img.create({// создание рисунка с кодом проекта в БД
+                        projectId: project.id,
+                        name: project.name + " - основной",
+                        path: fileName
+                    });
+                });
+            }
 
             return response.json(project);
 

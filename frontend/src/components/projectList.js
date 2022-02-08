@@ -12,7 +12,6 @@ export const ProjectList=({isBasket})=> {
 
     },);
     selectedProject=isBasket?basket.projects:projects;
-    console.log(selectedProject);
 
     return (
         <>
