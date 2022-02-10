@@ -37,17 +37,7 @@ export const Project = () => {
     return (
         <div>
             {
-                !projectItem.loaded||!project||!project.id?
-                    <Container>
-                        <h4>Загрузка данных...</h4>
-                        {
-                            projectItem.loading?
-                                <Spinner animation={"border"} variant={"secondary"} />
-                                :
-                                projectItem.error
-                        }
-                    </Container>
-                    :
+                !!project.id&&
                     <Container>
                         <h2 className="my-3  text-center">{project.name}</h2>
                         <Row>

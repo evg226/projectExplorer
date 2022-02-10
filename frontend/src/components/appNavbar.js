@@ -3,7 +3,7 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../store/selectors';
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { NavLink,useNavigate } from 'react-router-dom';
-import { ADMIN_ROUTE, DESK_ROUTE, SELECTED_DESK, SIGNIN_ROUTE, SIGNUP_ROUTE } from '../utils/constants';
+import {ADMIN_ROUTE, DESK_ROUTE, HOME_ROUTE, SELECTED_DESK, SIGNIN_ROUTE, SIGNUP_ROUTE} from '../utils/constants';
 import { setUser } from '../store/action';
 
 export const AppNavbar = () => {
@@ -24,7 +24,7 @@ export const AppNavbar = () => {
         <>
             <Navbar collapseOnSelect expand="sm" bg="dark" variant="dark">
                 <Container>
-                    <NavLink to={DESK_ROUTE}>
+                    <NavLink to={HOME_ROUTE}>
                         <Navbar.Brand>Project Explorer</Navbar.Brand>
                     </NavLink>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />

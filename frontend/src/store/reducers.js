@@ -1,4 +1,6 @@
 import {
+    ACTION_FAILURE,
+    ACTION_START, ACTION_STOPSHOW, ACTION_SUCCESS,
     ADD_AUTHORS, ADD_IMAGE,
     ADD_PROJECTS,
     ADD_TO_BASKET,
@@ -16,6 +18,35 @@ import {
     SET_USER, UPDATE_AUTHOR,
     UPDATE_TYPE
 } from "./action";
+
+const messageDefault={isVisible:false,loading:false,type:0,text:""};
+export const reducerMessage = (state=messageDefault,action)=>{
+    switch(action.type){
+        case ACTION_START:
+            return {
+                isVisible:true,
+                loading:true,
+                type:"info",
+                text:action.payload
+            }
+        case ACTION_SUCCESS:
+            return {
+                ...state,
+                type:"success",
+                loading:false,
+            }
+        case ACTION_FAILURE:
+            return {
+                ...state,
+                loading:false,
+                type:"danger",
+                text:action.payload
+            }
+        case ACTION_STOPSHOW:
+            return messageDefault;
+        default:return state
+    }
+}
 
 const initialUser = {
     name:"",

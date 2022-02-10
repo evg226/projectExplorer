@@ -20,6 +20,39 @@ import {createBasketProject, deleteById, fetchBasket} from "../http/basket";
 import {createRating} from "../http/ratingApi";
 import {addImageQuery, deleteImageQuery, fetchImageQuery} from "../http/imageApi";
 
+export const ACTION_START="ACTION::STARTED";
+export const ACTION_SUCCESS="ACTION::SUCCESS";
+export const ACTION_FAILURE="ACTION::FAILRURE";
+export const ACTION_STOPSHOW="ACTION::STOPSHOW";
+export  const startAction=(name)=>{
+    return {
+        type:ACTION_START,
+        payload: name
+    }
+}
+export const actionSuccess=()=>{
+    return {
+        type:ACTION_SUCCESS,
+    }
+}
+export const actionFailure=(name)=>{
+    return {
+        type:ACTION_FAILURE,
+        payload: name
+    }
+}
+export const actionStopShow=()=>{
+    return {
+        type:ACTION_STOPSHOW,
+    }
+}
+export const stopAction=(result="success",message)=>dispatch=>{
+    if (result==="success")
+        dispatch (actionSuccess(message));
+    else if (result==="err")
+        dispatch(actionFailure(message))
+    setTimeout(()=>dispatch(actionStopShow()),2000);
+}
 
 
 
@@ -188,6 +221,7 @@ export const loadTypes = () => async(dispatch)=>{
     let types=[];
     try {
         types = await fetchTypes();
+
     } catch (e) {
         console.log(e);
         console.log(e.response.data.message);
@@ -354,19 +388,20 @@ export const appLoading = ()=>dispatch=>{
 }
 
 export const loadProject=(id)=>async (dispatch,getState) =>{
+    dispatch(startAction("Проект "+id));
     dispatch(setSeletedProject({loading: true, error: "", loaded: false, data:{}}));
     let project={};
     try {
-
         const currentProject=await fetchProjectbyId(id);
         const basket=getState().basket;
         const isInBasket=basket.projects && !!basket.projects.find(item=>item.id&&(item.id===parseInt(id)))?true:false;
-
         project={loading: false, error: "", loaded: true, data:currentProject?{...currentProject,isInBasket}:{id,name:"Не найдено"}};
+        dispatch(stopAction());
     }catch (e) {
         console.log(e);
         e.response&&console.log(e.response.data.message);
         project = {loading: false, error: e.response.data.message, loaded: false, data: {}};
+        dispatch(stopAction("err",e.response.data.message||e.message()));
     } finally {
         dispatch(setSeletedProject(project));
 
