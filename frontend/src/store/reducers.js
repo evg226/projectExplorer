@@ -1,13 +1,13 @@
 import {
-    ADD_AUTHORS,
+    ADD_AUTHORS, ADD_IMAGE,
     ADD_PROJECTS,
     ADD_TO_BASKET,
     ADD_TYPES,
-    DELETE_FROM_BASKET,
+    DELETE_FROM_BASKET, DELETE_IMAGE,
     INSERT_AUTHOR,
     INSERT_PROJECT,
     INSERT_TYPE,
-    LOAD_BASKET, REMOVE_AUTHOR,
+    LOAD_BASKET, LOAD_IMAGES, loadImages, REMOVE_AUTHOR,
     REMOVE_TYPE,
     SET_ACTIVE_PAGE,
     SET_SELECTED_AUTHOR,
@@ -172,8 +172,20 @@ export const reducerProjects=(state = initialProjects , action) => {
         }
         default:
             return state;
-
     }
 };
+
+export const reducerImage=(state={},action)=>{
+    switch (action.type){
+        case LOAD_IMAGES:
+            return action.payload
+        case ADD_IMAGE:
+            return [...state,action.payload]
+        case DELETE_IMAGE:
+            return state.filter(item=>item.id!==action.payload)
+        default:
+            return state
+    }
+}
 
 

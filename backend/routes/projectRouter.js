@@ -3,6 +3,9 @@ const router = new Router();
 const projectController = require("../controllers/projectController");
 const checkRoleMiddleware = require("../middleware/checkRoleMiddleware");
 const stackController = require("../controllers/stackController");
+const imageController = require("../controllers/imageController");
+
+
 
 
 router.post("/",checkRoleMiddleware("ADMIN"), projectController.create); //добавление
@@ -15,4 +18,11 @@ router.get ("/:projectId/stack",stackController.getAll); //обработка с
 router.post ("/:projectId/stack",checkRoleMiddleware("ADMIN"),stackController.create);
 router.delete("/:projectId/stack/:id",checkRoleMiddleware("ADMIN"), stackController.remove); //Удаление
 router.put("/:projectId/stack/:id",checkRoleMiddleware("ADMIN"), stackController.update); //Изменение
+
+router.get ("/:projectId/image",imageController.getAll); //обработка стека текущего проекта
+router.post ("/:projectId/image",checkRoleMiddleware("ADMIN"),imageController.create);
+router.delete("/:projectId/image/:id",checkRoleMiddleware("ADMIN"), imageController.remove); //Удаление
+
+
+
 module.exports = router;

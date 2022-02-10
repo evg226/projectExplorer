@@ -18,8 +18,13 @@ import {
 } from "../http/deviceApi";
 import {createBasketProject, deleteById, fetchBasket} from "../http/basket";
 import {createRating} from "../http/ratingApi";
-export const SET_USER = "USER::SET_USER";
+import {addImageQuery, deleteImageQuery, fetchImageQuery} from "../http/imageApi";
 
+
+
+
+
+export const SET_USER = "USER::SET_USER";
 export const setUser = (user) => {
     user.isAuth||localStorage.setItem("token","");
     return {
@@ -29,7 +34,6 @@ export const setUser = (user) => {
 }
 
 export const SET_SELECTED_TYPE = "PROJECT::SET_SELECTED_TYPE";
-
 export const setSeletedType = (type) => {
     return {
         type: SET_SELECTED_TYPE,
@@ -38,7 +42,6 @@ export const setSeletedType = (type) => {
 }
 
 export const SET_SELECTED_AUTHOR = "PROJECT::SET_SELECTED_AUTHOR";
-
 export const setSeletedAuthor = (author) => {
     return {
         type: SET_SELECTED_AUTHOR,
@@ -47,7 +50,6 @@ export const setSeletedAuthor = (author) => {
 }
 
 export const SET_SELECTED_PROJECT = "PROJECT::SET_SELECTED_PROJECT";
-
 export const setSeletedProject = (project) => {
     return {
         type: SET_SELECTED_PROJECT,
@@ -56,7 +58,6 @@ export const setSeletedProject = (project) => {
 }
 
 export const SET_ACTIVE_PAGE="PROJECTS::SET_ACTIVE_PAGE"
-
 export const setPage = (page) => {
     return {
         type: SET_ACTIVE_PAGE,
@@ -73,9 +74,7 @@ export const addBasket = (basket) => {
     }
 }
 
-
 export const DELETE_FROM_BASKET="BASKET::DELETE_BY_ID";
-
 export const deleteFromBasket=(projectId)=>{
     return {
         type: DELETE_FROM_BASKET,
@@ -423,7 +422,6 @@ export const createStackToDB =(name,description,projectId)=>async(dispatch)=>{
 export const deleteStackToDB =(id,projectId)=>async(dispatch)=>{
     try {
         const result = await deleteStackQuery(id,projectId);
-        console.log(result);
         if (result)
             dispatch(loadProject(projectId));
 
@@ -436,7 +434,6 @@ export const deleteStackToDB =(id,projectId)=>async(dispatch)=>{
 export const deleteProjectToDB =(id)=>async(dispatch)=>{
     try {
         const result = await deleteProjectQuery(id);
-        console.log(result);
         if (result)
             dispatch(loadProjects());
 
@@ -449,7 +446,6 @@ export const deleteProjectToDB =(id)=>async(dispatch)=>{
 export const updateProjectToDB =(id)=>async(dispatch)=>{
     try {
         const result = await updateProjectQuery(id);
-        console.log(result);
         if (result)
             dispatch(loadProjects());
 
@@ -460,3 +456,55 @@ export const updateProjectToDB =(id)=>async(dispatch)=>{
 }
 
 
+export const ADD_IMAGE="IMAGE::ADD";
+export const addImage = (image)=>{
+    return {
+        type:ADD_IMAGE,
+        payload:image
+    }
+}
+export const addImageToDB =(projectId,file)=>async(dispatch)=>{
+    try {
+        const formData=new FormData();
+        formData.append("image",file);
+        const image = await addImageQuery(projectId,formData);
+        if (image) dispatch(addImage(image));
+    } catch (e){
+        console.log(e.message);
+        console.log (e.response.data.message);
+    }
+}
+
+export const DELETE_IMAGE="IMAGE::DELETE";
+export const deleteImage = (id)=>{
+    return {
+        type:DELETE_IMAGE,
+        payload:id
+    }
+}
+export const deleteImageToDB =(projectId,id)=>async(dispatch)=>{
+    try {
+        const image = await deleteImageQuery(projectId,id);
+        if (image) dispatch(deleteImage(id));
+    } catch (e){
+        console.log(e.message);
+        console.log (e.response.data.message);
+    }
+}
+
+export const LOAD_IMAGES="IMAGE::LOAD";
+export const loadImages = (images)=>{
+    return {
+        type:LOAD_IMAGES,
+        payload:images
+    }
+}
+export const loadImageToDB =(projectId)=>async(dispatch)=>{
+    try {
+        const images = await fetchImageQuery(projectId);
+        if (images) dispatch(loadImages(images));
+    } catch (e){
+        console.log(e.message);
+        console.log (e.response.data.message);
+    }
+}

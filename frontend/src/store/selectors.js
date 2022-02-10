@@ -9,3 +9,4 @@ export const getPage = (state) => state.projects.activePage;
 export const getLimit = (state) => state.projects.limit;
 export const getTotalCount = (state) => state.projects.totalCount;
 export const getBasket=state=>state.basket;
+export const getImages=state=>state.images;

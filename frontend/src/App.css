@@ -10,4 +10,50 @@ a {
   color:#ffffff;
 }
 
+.imageGallery{
+  height: 100px;
+  display: flex;
+  margin: 20px 0;
 
+}
+.imageGallery img {
+  height: 100%;
+  }
+
+.gallery__add{
+  border: 1px solid #aaaaaa;
+  height: 100%;
+  width: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.gallery__img{
+  position: relative;
+  margin: 0 5px;
+
+}
+.gallery__add:hover,
+.gallery__img:hover
+{
+  box-shadow: 0 0 10px #222222;
+}
+.gallery__del{
+  cursor: pointer;
+  position: absolute;
+  z-index: 100;
+  top:0;
+  right: 0;
+  display: none;
+  padding: 2px 8px;
+  margin: 2px 6px;
+  border: 1px solid #aaaaaa;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.gallery__img:hover .gallery__del{
+  display: block;
+}

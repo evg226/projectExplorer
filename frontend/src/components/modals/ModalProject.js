@@ -1,5 +1,5 @@
 import { useState} from "react";
-import { Button,Col,Form,  Modal, Row } from "react-bootstrap";
+import {Button, Col, Form, Image, Modal, Row} from "react-bootstrap";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {getAuthors, getSelectedProject, getTypes} from "../../store/selectors";
 import { TypeAuthorCreate } from "./typeAuthor";
@@ -10,6 +10,8 @@ import {
     insertProjectToDB,
     updateProjectToDB
 } from "../../store/action";
+import {baseURL} from "../../utils/constants";
+import {ImageGallery} from "../imageGallery";
 
 export const ModalProject = ({ show, onHide,operation }) => {
     const dispatch=useDispatch();
@@ -146,20 +148,23 @@ export const ModalProject = ({ show, onHide,operation }) => {
                   </div>
                   <div className="d-flex my-2 align-items-center">
                       <Form.Label className="my-0 text-secondary me-2">Иконка</Form.Label>
+                      {operation === "Изменить"&&<Image height={"100px"} src={baseURL+project.icon}/>}
                       <Form.Control className="ms-5"
                                     type="file"
                                     onChange={handleSelectIcon}
                       />
                   </div>
-                  <div className="d-flex my-2 align-items-center">
-                      <Form.Label className="my-0 text-secondary">Изображения</Form.Label>
-                      <Form.Control className="ms-2"
-                                    multiple
-                                    type="file"
-                                    onChange={handleSelectImages}
-                      />
-                  </div>
-                  
+                  {operation === "Изменить" && <ImageGallery projectId={project.id}/> }
+                  {operation === "Добавить" &&
+                      <div className="d-flex my-2 align-items-center">
+                          <Form.Label className="my-0 text-secondary">Изображения</Form.Label>
+                          <Form.Control className="ms-2"
+                                        multiple
+                                        type="file"
+                                        onChange={handleSelectImages}
+                          />
+                      </div>
+                  }
                   <div className="d-flex my-2 align-items-center">
                       <Button variant="secondary" onClick={()=>setStackVisible(true)}>Добавить стек</Button>
                   </div>
